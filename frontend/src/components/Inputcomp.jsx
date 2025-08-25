@@ -1,6 +1,7 @@
 import React from 'react'
 import {TabletSmartphone } from 'lucide-react'
-import { getCountryCallingCode } from "libphonenumber-js";
+
+import '../App.css'
 
 // const countryCode = Intl.DateTimeFormat().resolvedOptions().locale.split("-")[1]; 
 
@@ -10,9 +11,7 @@ import { getCountryCallingCode } from "libphonenumber-js";
 const Inputcomp = ({iscountrycode,isRequired,Icon, type,value,onchange,placeholder,LastIcon=null,toggleEye}) => {
 
 
-const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-const countryCode = locale.split("-")[1];
-const callingCode = `+${getCountryCallingCode(countryCode)}`;
+  const callingCode='+91'
   return (
    <div className=' w-full gap-2 items-center bg-gray-50 border px-4 py-3 mt-4 mb-0 border-gray-200 rounded-md flex justify-center '>
    {Icon}

@@ -5,44 +5,48 @@ import { Lock, Smartphone, Eye, EyeOff } from "lucide-react";
 import Inputcomp from "./Inputcomp";
 import InputErrorMsg from "./InputErrorMsg";
 
-const BLUE_600 = "#2563eb"; // Tailwind blue-600
 
 const Login = () => {
-  const { setActiveComp,setContextPhoneNumber } = useAuth();
-  const [iserror,setisError]=useState(false)
+
+  const { setActiveComp, setContextPhoneNumber } = useAuth();
+  const [iserror, setisError] = useState(false);
   const [errormsg, setErrormsg] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isOTP, setIsOTP] = useState(true);
-  // onNumberChangefunction
+
   const onNumberChange = (e) => {
-    const value = e.target.value;
-    if (/^\d{0,10}$/.test(value)) {
-      setisError(false) 
+
+    const value = e.target.value.replace(/\D/g, "");
+
+   
+     if (/^\d{0,10}$/.test(value)) {
+      setisError(false)
       setPhoneNumber(value);
     }
   };
   //on password change function
   const onPasswordChange = (e) => {
-    setisError(false)
+    setisError(false);
     setPassword(e.target.value);
   };
 
   //handleLoginFunc
-  const HandleLogin=(e)=>{    
+  const HandleLogin = (e) => {
     e.preventDefault();
-    if(phoneNumber.length!==10){
-      setisError(true)
-      setErrormsg("Please enter a valid 10-digit phone number.")
+    if (phoneNumber.length !== 10) {
+      console.log(phoneNumber)
+      setisError(true);
+      setErrormsg("Please enter a valid 10-digit phone number.");
       return;
     }
-    setContextPhoneNumber(phoneNumber)
-   setActiveComp('otp')
-  }
+    setContextPhoneNumber(phoneNumber);
+    setActiveComp("otp");
+  };
   return (
     <div className="flex  flex-1 h-screen justify-center w-full">
-      <div className="w-[60%] mt-40 flex flex-col  items-start">
+      <div className=" w-full px-10 md:px-0 md:w-[60%] mt-20 md:mt-40 flex flex-col  items-start">
         <AuthHeader firstText="Intern" secondText="scan" />
 
         <div className="w-full mb-30">
@@ -58,10 +62,7 @@ const Login = () => {
           </div>
 
           {/* Form Section */}
-          <form
-            onSubmit={HandleLogin}
-            className="w-sm"
-          >
+          <form onSubmit={HandleLogin} className=" w-full  md:w-sm">
             <Inputcomp
               iscountrycode={true}
               isRequired={true}
@@ -69,13 +70,13 @@ const Login = () => {
               placeholder={"Phone Number"}
               value={phoneNumber}
               onchange={onNumberChange}
-              type="number"
-              maxLength={10}
+              type="text"
+              // maxLength={10}
             />
-            {iserror && (<InputErrorMsg message={errormsg} />)}
+            {iserror && <InputErrorMsg message={errormsg} />}
             {!isOTP && (
               <Inputcomp
-              iscountrycode={false}
+                iscountrycode={false}
                 Icon={<Lock size={20} color="gray" />}
                 placeholder={"Password"}
                 value={password}
@@ -96,7 +97,7 @@ const Login = () => {
               <button
                 onClick={() => setIsOTP((prev) => !prev)}
                 type="button"
-                className="text-blue-600 cursor-pointer font-medium hover:underline"
+                className="text-blue-600 cursor-pointer font-medium hover:underline "
               >
                 {isOTP ? "Login with Password" : "Login with OTP"}
               </button>
@@ -104,7 +105,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full mt-8 py-3 cursor-pointer text-white font-bold rounded-lg bg-[#065AD8]"
+              className="w-full mt-8 py-3 cursor-pointer text-white font-bold rounded-lg bg-[#065AD8] hover:bg-[#065AD8]/80"
             >
               {isOTP ? "Continue with OTP" : "Log In"}
             </button>
