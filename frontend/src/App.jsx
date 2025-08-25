@@ -1,8 +1,12 @@
 import React from 'react'
 
+import Auth from './pages/Auth'
 const App = () => {
   return (
-    <div>App</div>
+    <>
+      <Auth />
+
+    </>
   )
 }
 
