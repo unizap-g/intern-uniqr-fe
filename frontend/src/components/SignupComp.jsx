@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AuthHeader from "./AuthHeader";
 import Inputcomp from "./Inputcomp";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import InputErrorMsg from "./InputErrorMsg";
 import { Smartphone } from "lucide-react";
 const SignupComp = () => {

@@ -1,7 +1,7 @@
 import AuthHeader from "./AuthHeader";
 import React,{useState} from "react";
 import Inputcomp from "./Inputcomp";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 const OtpComp = ({ contextPhoneNumber }) => {
 	const { setActiveComp } = useAuth();
 	const [otp, setOtp] = useState("");
