@@ -1,10 +1,23 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import {TabletSmartphone } from 'lucide-react'
-const Inputcomp = ({Icon, type,value,onchange,placeholder,LastIcon=null,toggleEye}) => {
+import { getCountryCallingCode } from "libphonenumber-js";
+
+// const countryCode = Intl.DateTimeFormat().resolvedOptions().locale.split("-")[1]; 
+
+// const callingCode = getCountryCallingCode(countryCode);
+// console.log(countryCode);
+
+const Inputcomp = ({iscountrycode,isRequired,Icon, type,value,onchange,placeholder,LastIcon=null,toggleEye}) => {
+
+
+const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+const countryCode = locale.split("-")[1];
+const callingCode = `+${getCountryCallingCode(countryCode)}`;
   return (
-   <div className=' w-full gap-2 items-center bg-gray-50 border px-4 py-3 mt-2 mb-2 border-gray-200 rounded-md flex justify-center '>
+   <div className=' w-full gap-2 items-center bg-gray-50 border px-4 py-3 mt-4 mb-0 border-gray-200 rounded-md flex justify-center '>
    {Icon}
-    <input  value={value} onChange={onchange} type={type} className='bg-transparent outline-none border-none w-full' placeholder={placeholder} />
+   {iscountrycode && <span>{callingCode}</span>}
+    <input required={isRequired}  value={value} onChange={onchange} type={type} className='bg-transparent outline-none border-none w-full' placeholder={placeholder} />
    <div onClick={toggleEye}>
     {LastIcon}
    </div>

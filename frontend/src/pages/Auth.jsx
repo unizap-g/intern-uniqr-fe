@@ -4,18 +4,20 @@ import LoginComp from '../components/LoginComp'
 import SignupComp from '../components/SignupComp'
 import { AuthContext } from '../context/AuthContext'
 import Login from '../components/Login'
+import OtpComp from '../components/OtpComp'
 import { useAuth } from '../context/AuthContext'
 const Auth = () => {
   const [activeComp,setActiveComp]=useState('login')
+  const [contextPhoneNumber,setContextPhoneNumber]=useState("")
   console.log(activeComp);
   return (
     // const []
-    <AuthContext.Provider value={{ activeComp, setActiveComp }}>
+    <AuthContext.Provider value={{ activeComp, setActiveComp, contextPhoneNumber, setContextPhoneNumber }}>
       <div className='flex w-full h-screen'>
-        {/* <LoginComp /> */}
-        {/* <SignupComp/> */}
+
         {activeComp === "login" && <Login />}
         {activeComp === "signup" && <SignupComp />}
+        {activeComp === "otp" && <OtpComp contextPhoneNumber={contextPhoneNumber} />}
         <Banner />
       </div>
     </AuthContext.Provider>

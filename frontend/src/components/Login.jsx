@@ -3,12 +3,14 @@ import AuthHeader from "./AuthHeader";
 import { useAuth } from "../context/AuthContext";
 import { Lock, Smartphone, Eye, EyeOff } from "lucide-react";
 import Inputcomp from "./Inputcomp";
+import InputErrorMsg from "./InputErrorMsg";
 
 const BLUE_600 = "#2563eb"; // Tailwind blue-600
 
 const Login = () => {
-  const { setActiveComp } = useAuth();
-
+  const { setActiveComp,setContextPhoneNumber } = useAuth();
+  const [iserror,setisError]=useState(false)
+  const [errormsg, setErrormsg] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -17,17 +19,26 @@ const Login = () => {
   const onNumberChange = (e) => {
     const value = e.target.value;
     if (/^\d{0,10}$/.test(value)) {
+      setisError(false) 
       setPhoneNumber(value);
     }
   };
   //on password change function
   const onPasswordChange = (e) => {
+    setisError(false)
     setPassword(e.target.value);
   };
 
   //handleLoginFunc
-  const HandleLogin=(e)=>{
+  const HandleLogin=(e)=>{    
     e.preventDefault();
+    if(phoneNumber.length!==10){
+      setisError(true)
+      setErrormsg("Please enter a valid 10-digit phone number.")
+      return;
+    }
+    setContextPhoneNumber(phoneNumber)
+   setActiveComp('otp')
   }
   return (
     <div className="flex  flex-1 h-screen justify-center w-full">
@@ -52,6 +63,8 @@ const Login = () => {
             className="w-sm"
           >
             <Inputcomp
+              iscountrycode={true}
+              isRequired={true}
               Icon={<Smartphone size={20} color="gray" />}
               placeholder={"Phone Number"}
               value={phoneNumber}
@@ -59,8 +72,10 @@ const Login = () => {
               type="number"
               maxLength={10}
             />
+            {iserror && (<InputErrorMsg message={errormsg} />)}
             {!isOTP && (
               <Inputcomp
+              iscountrycode={false}
                 Icon={<Lock size={20} color="gray" />}
                 placeholder={"Password"}
                 value={password}

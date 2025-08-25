@@ -2,21 +2,32 @@ import React, { useState } from "react";
 import AuthHeader from "./AuthHeader";
 import Inputcomp from "./Inputcomp";
 import { useAuth } from "../context/AuthContext";
+import InputErrorMsg from "./InputErrorMsg";
 import { Smartphone } from "lucide-react";
 const SignupComp = () => {
-    const {setActiveComp } = useAuth();    
+    const {setActiveComp, setContextPhoneNumber } = useAuth();    
+      const [iserror,setisError]=useState(false)
+      const [errormsg, setErrormsg] = useState("");
     const [phoneNumber,setPhoneNumber] = useState("");
       // onNumberChangefunction
     const onNumberChange=(e)=>{
         const value = e.target.value;
     if (/^\d{0,10}$/.test(value)) {
       setPhoneNumber(value);
+      setisError(false)
     }
 }
 
   // handle signup form submit
   const handleSubmit=(e)=>{
     e.preventDefault();
+    if(phoneNumber.length!==10){
+        setisError(true)
+        setErrormsg("Please enter a valid 10-digit phone number.")
+        return;
+    }
+    setContextPhoneNumber(phoneNumber)
+    setActiveComp('otp')
   }
   return (
     <div className=" flex-1 h-full  justify-center  flex ">
@@ -34,7 +45,8 @@ const SignupComp = () => {
         <form
         onSubmit={handleSubmit}
          className="w-sm">
-          <Inputcomp Icon={<Smartphone size={20} color="gray" />} placeholder={"Phone Number"} value={phoneNumber} onchange={onNumberChange} type="number" maxLength={10} />
+          <Inputcomp iscountrycode={true} isRequired={true} Icon={<Smartphone size={20} color="gray" />} placeholder={"Phone Number"} value={phoneNumber} onchange={onNumberChange} type="number" maxLength={10} />
+          {iserror && (<InputErrorMsg message={errormsg} />)}
           <button
            type="submit"
            className="w-full mt-8 py-3 text-white font-bold rounded-lg bg-[#065AD8]">
