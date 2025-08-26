@@ -1,6 +1,6 @@
 import React from "react";
 
-const OtpInput = ({ value, onchange, type, placeholder }) => {
+const OtpInput = ({ value, onchange, placeholder }) => {
   return (
     <div className=" w-full gap-2 items-center bg-gray-50 border px-4 py-1 mt-4 mb-0 border-gray-200 rounded-md flex justify-center ">
       <input

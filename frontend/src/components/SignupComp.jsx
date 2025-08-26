@@ -3,9 +3,10 @@ import AuthHeader from "./AuthHeader";
 import Inputcomp from "./Inputcomp";
 import { useAuth } from "../hooks/useAuth";
 import InputErrorMsg from "./InputErrorMsg";
+import axios from "axios";
 import { Smartphone } from "lucide-react";
 const SignupComp = () => {
-  const { setActiveComp, setContextPhoneNumber } = useAuth();
+  const { setActiveComp, setContextPhoneNumber,setPrevComp ,setIsLoading} = useAuth();
   const [iserror, setisError] = useState(false);
   const [errormsg, setErrormsg] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -19,15 +20,42 @@ const SignupComp = () => {
   };
 
   // handle signup form submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+
     e.preventDefault();
     if (phoneNumber.length !== 10) {
       setisError(true);
       setErrormsg("Please enter a valid 10-digit phone number.");
       return;
     }
+    setIsLoading(true);
+      try {
+      const res = await axios.post(`${URL}/auth/send-otp`, {
+        mobileNumber: `91${phoneNumber}`,
+      });
+      
+
+      if(res.status==200){
+        setIsLoading(false);
+        setContextPhoneNumber(phoneNumber);
+        setActiveComp("otp");
+        setPrevComp("signup");
+      }
+      else{
+        setIsLoading(false);
+        setisError(true);
+        setErrormsg("otp send failed");
+      }
+      
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+      setisError(true);
+      setErrormsg("otp send failed");
+    }
     setContextPhoneNumber(phoneNumber);
     setActiveComp("otp");
+    setPrevComp("signup");
   };
   return (
     <div className=" flex-1 h-screen w-full justify-center flex ">
@@ -56,7 +84,7 @@ const SignupComp = () => {
           {iserror && <InputErrorMsg message={errormsg} />}
           <button
             type="submit"
-            className="w-full mt-8 py-3 text-white font-bold rounded-lg bg-[#065AD8] hover:bg-[#065AD8]/80"
+            className="w-full active:scale-98 transform transition duration-100 mt-8 py-3 text-white font-bold rounded-lg bg-[#065AD8] hover:bg-[#065AD8]/80"
           >
             Sign Up
           </button>
@@ -66,7 +94,7 @@ const SignupComp = () => {
               Already have an account?{" "}
               <span
                 onClick={() => setActiveComp("login")}
-                className="text-blue-500 cursor-pointer hover:text-[#065AD8]/80"
+                className="text-blue-500  cursor-pointer hover:text-[#065AD8]/80"
               >
                 Log in
               </span>

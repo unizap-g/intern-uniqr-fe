@@ -1,27 +1,61 @@
 import AuthHeader from "./AuthHeader";
 import React, { useState } from "react";
-import Inputcomp from "./Inputcomp";
-
+import { ArrowBigLeft } from "lucide-react";
+import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
-import OtpInput from "./OtpInput";
+import OtpBox from "./OtpBox";
+import InputErrorMsg from "./InputErrorMsg";
+
 const OtpComp = ({ contextPhoneNumber }) => {
-  const { setActiveComp } = useAuth();
+  const [iserror, setisError] = useState(false);
+  const [errormsg, setErrormsg] = useState("");
+  const URL = import.meta.env.VITE_API_URL;
+  const { setActiveComp, prevComp, setIsLoading } = useAuth();
   const [otp, setOtp] = useState("");
-  const onotpChange = (e) => {
-    const value = e.target.value.replace(/\D/g, "");
-    if (/^\d{0,4}$/.test(value)) {
+
+  const onotpChange = (value) => {
+    if (/^\d{0,6}$/.test(value)) {
       setOtp(value);
+      setisError(false);
     }
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
-    // console.log("Submitted OTP:", otp);
+    try {
+      const res = await axios.post(`${URL}/auth/verify-otp`, {
+        mobileNumber: `91${contextPhoneNumber}`,
+        otp: otp,
+      });
+      if (res.status === 201) {
+        setIsLoading(false);
+        // OTP verification successful
+        console.log("OTP verification successful");
+        console.log(res.data);
+        setOtp("");
+      } else {
+        // Handle error (e.g., show error message)
+        console.error("OTP verification failed");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+      setErrormsg("Invalid OTP");
+      setisError(true);
+      setOtp("");
+    }
   };
   return (
     <div className="flex-1 h-screen bg-white  flex justify-center ">
       <div className="flex px-10 md:px-0 flex-col gap-3 w-full md:w-[60%] mt-20 md:mt-40">
         <AuthHeader firstText="biz" secondText="scan" />
-        <div className=" mt-10">
+        <div className="flex items-center gap-2  mt-10">
+          <div
+            onClick={() => setActiveComp(prevComp)}
+            className="cursor-pointer active:scale-90 "
+          >
+            <ArrowBigLeft />
+          </div>
           <h1 className="text-3xl text-black-600 font-bold">Enter OTP</h1>
         </div>
         <div className=" mt-4 mb-10">
@@ -32,17 +66,18 @@ const OtpComp = ({ contextPhoneNumber }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="w-full md:w-sm">
-          <OtpInput value={otp} onchange={onotpChange} />
+         <OtpBox onChangeOTP={onotpChange}/>
+          {iserror && <InputErrorMsg message={errormsg} />}
           <button
             type="submit"
             className="w-full cursor-pointer mt-8 py-3 text-white font-bold rounded-lg bg-[#065AD8]
 			hover:bg-[#065AD8]/80
 			"
           >
-            Sign Up
+            {prevComp === "signup" ? "Sign Up" : "Continue"}
           </button>
 
-          <div className="w-full flex justify-center items-center mt-5 ">
+          {/* <div className="w-full flex justify-center items-center mt-5 ">
             <p className="text-[14px] font-bold text-gray-600">
               Already have an account?{" "}
               <span
@@ -52,7 +87,7 @@ const OtpComp = ({ contextPhoneNumber }) => {
                 Log in
               </span>
             </p>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>

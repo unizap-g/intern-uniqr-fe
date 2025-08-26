@@ -1,26 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Banner from "../components/Banner";
 import SignupComp from "../components/SignupComp";
 import AuthContext from "../context/AuthContext";
 import Login from "../components/Login";
 import OtpComp from "../components/OtpComp";
-
+import Loading from "../components/Loading";
 const Auth = () => {
 
   const [activeComp, setActiveComp] = useState("login");
+  const [isLoading,setIsLoading]=useState(false);
+  const [prevComp, setPrevComp] = useState("login");
   const [contextPhoneNumber, setContextPhoneNumber] = useState("");
   console.log(activeComp);
   return (
     // const []
     <AuthContext.Provider
       value={{
+        isLoading,
+        setIsLoading,
         activeComp,
         setActiveComp,
         contextPhoneNumber,
         setContextPhoneNumber,
+        prevComp,
+        setPrevComp
       }}
     >
-      <div className="flex w-full flex-col md:flex-row-reverse h-screen ">
+      <div className="flex relative w-full flex-col md:flex-row-reverse h-screen ">
+        {isLoading && <Loading />}
         <Banner />
         {activeComp === "login" && <Login />}
         {activeComp === "signup" && <SignupComp />}

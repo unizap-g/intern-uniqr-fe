@@ -4,25 +4,23 @@ import { useAuth } from "../hooks/useAuth";
 import { Lock, Smartphone, Eye, EyeOff } from "lucide-react";
 import Inputcomp from "./Inputcomp";
 import InputErrorMsg from "./InputErrorMsg";
-
+import axios from "axios";
 
 const Login = () => {
-
-  const { setActiveComp, setContextPhoneNumber } = useAuth();
+  const { setActiveComp, setPrevComp, setContextPhoneNumber,setIsLoading } = useAuth();
   const [iserror, setisError] = useState(false);
   const [errormsg, setErrormsg] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isOTP, setIsOTP] = useState(true);
+  const URL = import.meta.env.VITE_API_URL;
 
   const onNumberChange = (e) => {
-
     const value = e.target.value.replace(/\D/g, "");
 
-   
-     if (/^\d{0,10}$/.test(value)) {
-      setisError(false)
+    if (/^\d{0,10}$/.test(value)) {
+      setisError(false);
       setPhoneNumber(value);
     }
   };
@@ -33,16 +31,39 @@ const Login = () => {
   };
 
   //handleLoginFunc
-  const HandleLogin = (e) => {
+  const HandleLogin = async (e) => {
     e.preventDefault();
     if (phoneNumber.length !== 10) {
-      console.log(phoneNumber)
+      console.log(phoneNumber);
       setisError(true);
       setErrormsg("Please enter a valid 10-digit phone number.");
       return;
     }
-    setContextPhoneNumber(phoneNumber);
-    setActiveComp("otp");
+    setIsLoading(true);
+    try {
+      const res = await axios.post(`${URL}/auth/send-otp`, {
+        mobileNumber: `91${phoneNumber}`,
+      });
+      
+
+      if(res.status==200){
+        setIsLoading(false);
+        setContextPhoneNumber(phoneNumber);
+        setActiveComp("otp");
+        setPrevComp("login");
+      }
+      else{
+        setIsLoading(false);
+        setisError(true);
+        setErrormsg("otp send failed");
+      }
+      
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+      setisError(true);
+      setErrormsg("otp send failed");
+    }
   };
   return (
     <div className="flex  flex-1 h-screen justify-center w-full">
@@ -62,7 +83,7 @@ const Login = () => {
           </div>
 
           {/* Form Section */}
-          <form onSubmit={HandleLogin} className=" w-full  md:w-sm">
+          <form onSubmit={HandleLogin} className="w-full lg:w-[80%]">
             <Inputcomp
               iscountrycode={true}
               isRequired={true}
@@ -97,7 +118,7 @@ const Login = () => {
               <button
                 onClick={() => setIsOTP((prev) => !prev)}
                 type="button"
-                className="text-blue-600 cursor-pointer font-medium hover:underline "
+                className="text-blue-600 active:scale-90 cursor-pointer font-medium hover:underline "
               >
                 {isOTP ? "Login with Password" : "Login with OTP"}
               </button>
@@ -105,7 +126,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full mt-8 py-3 cursor-pointer text-white font-bold rounded-lg bg-[#065AD8] hover:bg-[#065AD8]/80"
+              className="w-full mt-8 active:scale-98 transform transition duration-100 py-3 cursor-pointer text-white font-bold rounded-lg bg-[#065AD8] hover:bg-[#065AD8]/80"
             >
               {isOTP ? "Continue with OTP" : "Log In"}
             </button>
