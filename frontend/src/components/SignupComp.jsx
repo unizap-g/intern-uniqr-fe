@@ -92,12 +92,12 @@ const SignupComp = () => {
           <div className="w-full flex justify-center items-center mt-5 ">
             <p className="text-[14px] font-bold text-gray-600">
               Already have an account?{" "}
-              <span
+              <button
                 onClick={() => setActiveComp("login")}
                 className="text-blue-500  cursor-pointer hover:text-[#065AD8]/80"
               >
                 Log in
-              </span>
+              </button>
             </p>
           </div>
         </form>

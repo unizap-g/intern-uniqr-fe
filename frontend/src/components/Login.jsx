@@ -139,12 +139,15 @@ const Login = () => {
             <div className="w-full flex justify-center items-center mt-5 ">
               <p className="text-[14px] font-bold text-gray-600">
                 Don't have an account?{" "}
-                <span
-                  onClick={() => setActiveComp("signup")}
+                <button
+                  onClick={() => {
+                    console.log("clicked");
+                    setActiveComp("signup");
+                  }}
                   className="text-blue-500 cursor-pointer"
                 >
                   Create an account
-                </span>
+                </button>
               </p>
             </div>
           </form>
