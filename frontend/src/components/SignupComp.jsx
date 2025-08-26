@@ -13,6 +13,11 @@ const SignupComp = () => {
   // onNumberChangefunction
   const onNumberChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
+     if(value.startsWith("0")){
+      setErrormsg("Number can't start with 0");
+      setisError(true);
+      return;
+    }
     if (/^\d{0,10}$/.test(value)) {
       setPhoneNumber(value);
       setisError(false);

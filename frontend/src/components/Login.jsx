@@ -19,7 +19,7 @@ const Login = () => {
   const onNumberChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
     console.log(value);
-    if(value=="0"){
+    if(value.startsWith("0")){
       setErrormsg("Number can't start with 0");
       setisError(true);
       return;
