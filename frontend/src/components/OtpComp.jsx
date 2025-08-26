@@ -22,7 +22,7 @@ const OtpComp = ({ contextPhoneNumber }) => {
   };
   const handleSubmit = async (e) => {
 	e.preventDefault();
-    if(otp===""){
+    if(otp.length!==6){
 		setErrormsg("please enter otp")
 		setisError(true)
 		return;
