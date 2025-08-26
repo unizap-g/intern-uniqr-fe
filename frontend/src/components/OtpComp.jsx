@@ -27,6 +27,7 @@ const OtpComp = ({ contextPhoneNumber }) => {
 		setisError(true)
 		return;
 	}
+	
 	setIsLoading(true);
     e.preventDefault();
     try {
@@ -41,12 +42,14 @@ const OtpComp = ({ contextPhoneNumber }) => {
         console.log(res.data);
         setOtp("");
       } else {
-        // Handle error (e.g., show error message)
+		setIsLoading(false);
+		setErrormsg("Invalid OTP");
+		setisError(true);
         console.error("OTP verification failed");
       }
     } catch (error) {
       setIsLoading(false);
-      console.error(error);
+      console.error("check",error);
       setErrormsg("Invalid OTP");
       setisError(true);
       setOtp("");
