@@ -14,13 +14,20 @@ const OtpComp = ({ contextPhoneNumber }) => {
   const [otp, setOtp] = useState("");
 
   const onotpChange = (value) => {
+
     if (/^\d{0,6}$/.test(value)) {
       setOtp(value);
       setisError(false);
     }
   };
   const handleSubmit = async (e) => {
-    setIsLoading(true);
+	e.preventDefault();
+    if(otp===""){
+		setErrormsg("please enter otp")
+		setisError(true)
+		return;
+	}
+	setIsLoading(true);
     e.preventDefault();
     try {
       const res = await axios.post(`${URL}/auth/verify-otp`, {
@@ -67,7 +74,11 @@ const OtpComp = ({ contextPhoneNumber }) => {
 
         <form onSubmit={handleSubmit} className="w-full md:w-sm">
          <OtpBox onChangeOTP={onotpChange}/>
-          {iserror && <InputErrorMsg message={errormsg} />}
+          {iserror && (
+			<div className="ml-5">
+				<InputErrorMsg message={errormsg} />
+			</div>
+		  )}
           <button
             type="submit"
             className="w-full cursor-pointer mt-8 py-3 text-white font-bold rounded-lg bg-[#065AD8]

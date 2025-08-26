@@ -2,7 +2,7 @@ import React from "react";
 
 const Banner = () => {
   return (
-    <div className="m-0 font-sans min-h-screen hidden md:flex flex-col md:flex-row w-full md:w-1/2">
+    <div className="   m-0 font-sans min-h-screen hidden md:flex flex-col md:flex-row w-full md:w-1/2">
       {/* Left Side: Login */}
 
       {/* Right Side: Business QR */}

@@ -18,7 +18,12 @@ const Login = () => {
 
   const onNumberChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
-
+    console.log(value);
+    if(value=="0"){
+      setErrormsg("Number can't start with 0");
+      setisError(true);
+      return;
+    }
     if (/^\d{0,10}$/.test(value)) {
       setisError(false);
       setPhoneNumber(value);
@@ -67,7 +72,7 @@ const Login = () => {
   };
   return (
     <div className="flex  flex-1 h-screen justify-center w-full">
-      <div className=" w-full px-10 md:px-0 md:w-[60%] mt-20 md:mt-40 flex flex-col  items-start">
+      <div className="w-full px-10 md:px-0 md:w-[60%] mt-20  md:mt-40 flex flex-col  items-start">
         <AuthHeader firstText="Intern" secondText="scan" />
 
         <div className="w-full mb-30">
