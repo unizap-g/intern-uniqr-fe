@@ -34,7 +34,8 @@ const OtpComp = ({ contextPhoneNumber }) => {
     e.preventDefault();
     try {
       const res = await axios.post(`${URL}/auth/verify-otp`, {
-        mobileNumber: `91${contextPhoneNumber}`,
+        countryCode: "91",
+        mobileNumber: contextPhoneNumber,
         otp: otp,
       });
       if (res.status === 201) {

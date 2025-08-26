@@ -47,7 +47,8 @@ const Login = () => {
     setIsLoading(true);
     try {
       const res = await axios.post(`${URL}/auth/send-otp`, {
-        mobileNumber: `91${phoneNumber}`,
+        countryCode: "91",
+        mobileNumber: phoneNumber,
       });
       
 
