@@ -102,6 +102,7 @@ const Login = () => {
             {iserror && <InputErrorMsg message={errormsg} />}
             {!isOTP && (
               <Inputcomp
+              isRequired={true}
                 iscountrycode={false}
                 Icon={<Lock size={20} color="gray" />}
                 placeholder={"Password"}

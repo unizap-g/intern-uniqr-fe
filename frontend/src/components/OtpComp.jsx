@@ -5,9 +5,11 @@ import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 import OtpBox from "./OtpBox";
 import InputErrorMsg from "./InputErrorMsg";
+import { useNavigate } from "react-router-dom";
 
 const OtpComp = ({ contextPhoneNumber }) => {
   const [iserror, setisError] = useState(false);
+  const navigate = useNavigate();
   const [errormsg, setErrormsg] = useState("");
   const URL = import.meta.env.VITE_API_URL;
   const { setActiveComp, prevComp, setIsLoading } = useAuth();
@@ -37,6 +39,7 @@ const OtpComp = ({ contextPhoneNumber }) => {
       });
       if (res.status === 201) {
         setIsLoading(false);
+        navigate("/dashboard");
         // OTP verification successful
         console.log("OTP verification successful");
         console.log(res.data);
