@@ -6,7 +6,7 @@ const Banner = () => {
       {/* Left Side: Login */}
 
       {/* Right Side: Business QR */}
-      <div className="flex-1 bg-[#7dceee] flex flex-col justify-center items-center p-6 md:p-10">
+      <div className="flex-1 bg-[#7BCDF4] flex flex-col justify-center items-center p-6 md:p-10">
         <img
           src="/Banner.jpg"
           alt="Business QR"

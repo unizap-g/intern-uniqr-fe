@@ -3,6 +3,7 @@ import Navbar from './Navbar'
 import Dashboard3 from './Dashboard3'
 import DisplayData from './DisplayData'
 import QrSelect from './QrSelect'
+import Dashboard1 from './Dashboard1'
 import MonthOption from './MonthOption'
 const MainDashboard = () => {
   return (
@@ -16,6 +17,7 @@ const MainDashboard = () => {
       <div className='mt-8 mb-8'>
         <DisplayData />
       </div>
+      <Dashboard1 />
       <Dashboard3 />
       </div>
     </div>

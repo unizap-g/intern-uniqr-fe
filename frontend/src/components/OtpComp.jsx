@@ -56,7 +56,7 @@ const OtpComp = ({ contextPhoneNumber }) => {
       console.error("check",error);
       setErrormsg("Invalid OTP");
       setisError(true);
-      setOtp("");
+      // setOtp("");
     }
   };
   return (
