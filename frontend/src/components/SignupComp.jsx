@@ -66,7 +66,7 @@ const SignupComp = () => {
   return (
     <div className=" flex-1 h-screen w-full justify-center flex ">
       <div className="flex flex-col px-10 md:px-0 w-full md:w-[60%] mt-20 md:mt-40  items-start">
-        <AuthHeader firstText="biz" secondText="scan" />
+        <AuthHeader firstText="intern" secondText="scan" />
         <div className="mt-10">
           <h1 className="text-3xl  font-bold">Create an account</h1>
         </div>
