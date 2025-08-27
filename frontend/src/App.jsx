@@ -1,10 +1,9 @@
-import React from "react";
-import Loading from "./components/Loading";
+
 import Auth from "./pages/Auth";
-import Temp from "./components/OtpBox";
+
 import Dashboard from "./pages/Dashboard";
 import { Router, Route, Routes } from "react-router-dom";
-import VerifyWrapper from "./Wrapper/verifyWrapper.jsx";
+import VerifyWrapper from "./components/VerifyWrapper.jsx";
 import {VerifyProvider} from './context/VerifyContext';
 const App = () => {
   return (
