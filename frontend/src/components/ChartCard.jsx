@@ -10,3 +10,4 @@ const ChartCard = ({ title, children }) => {
 };
 
 export default ChartCard;
+// export default ChartCard;
