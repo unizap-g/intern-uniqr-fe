@@ -38,6 +38,7 @@ const Dashboard2 = () => {
         backgroundColor: "rgba(59, 130, 246, 1)",
         borderRadius: 8,
         barPercentage: 0.2,
+        opacity : 0.7,
       },
     ],
   };
@@ -56,6 +57,9 @@ const Dashboard2 = () => {
           lineHeight: 1.2,
         },
         align: "start",
+        padding : {
+         bottom : 24
+        }
       },
     },
     scales: {
