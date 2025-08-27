@@ -1,6 +1,6 @@
 import React from 'react'
 import Sidebar from '../components/Sidebar'
-import MainDashboard from '../components/MainDeshboard'
+import MainDashboard from '../components/MainDashboard'
 const Dashboard = () => {
   return (
     <div className='min-h-screen w-full flex '>

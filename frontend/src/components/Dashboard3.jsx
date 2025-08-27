@@ -1,5 +1,5 @@
 import React from "react";
-import { Doughnut, Line, Bubble } from "react-chartjs-2";
+import { Doughnut, Line, Bubble, PolarArea } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   Title,
@@ -14,7 +14,6 @@ import {
 } from "chart.js";
 import ChartCard from "./ChartCard";
 
-// Register chart.js components
 ChartJS.register(
   Title,
   Tooltip,
@@ -28,7 +27,6 @@ ChartJS.register(
 );
 
 const Dashboard3 = () => {
-  // Doughnut chart data
   const doughnutData = {
     labels: ["Chrome", "Safari", "Firefox"],
     datasets: [
@@ -39,6 +37,33 @@ const Dashboard3 = () => {
       },
     ],
   };
+
+    const noLabelOptions = {
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false },
+      }
+    };
+
+    const axisFontOptions = {
+      ...noLabelOptions,
+      scales: {
+        x: {
+          ticks: {
+            font: {
+              size: 10 // x-axis font size
+            }
+          }
+        },
+        y: {
+          ticks: {
+            font: {
+              size: 10 // y-axis font size
+            }
+          }
+        }
+      }
+    };
 
   // Line chart data
   const lineData = {
@@ -77,20 +102,24 @@ const Dashboard3 = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
       {/* Doughnut Chart */}
       <ChartCard title="Scans by browser">
-        <Doughnut data={doughnutData} />
+        <div style={{ width: "250px", margin: "0 auto" }}>
+          <Doughnut data={doughnutData} options={noLabelOptions} />
+        </div>
       </ChartCard>
 
       {/* Line Chart */}
       <ChartCard title="Scans by QR name">
-        <Line data={lineData} />
+        <div style={{ width: "250px", margin: "0 auto" }}>
+          <Line data={lineData} options={axisFontOptions} />
+        </div>
       </ChartCard>
 
       {/* Bubble Chart */}
       <ChartCard title="Scans by time of day">
-        <Bubble data={bubbleData} />
+        <Bubble data={bubbleData} options={axisFontOptions} />
       </ChartCard>
     </div>
   );
