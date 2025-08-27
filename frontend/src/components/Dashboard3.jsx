@@ -26,12 +26,12 @@ ChartJS.register(
   BubbleController
 );
 
-const Dashboard3 = () => {
+const Dashboard3 = ({ scanByBrowser, scanByQrName }) => {
   const doughnutData = {
-    labels: ["Chrome", "Safari", "Firefox"],
+    labels: scanByBrowser.map(item => item.browser),
     datasets: [
       {
-        data: [64, 18, 18],
+        data: scanByBrowser.map(item => item.scans),
         backgroundColor: ["#00C49F", "#FF8042", "#0088FE"],
         borderWidth: 0,
       },
@@ -67,17 +67,17 @@ const Dashboard3 = () => {
 
   // Line chart data
   const lineData = {
-    labels: ["January", "February", "March",""],
+    labels: scanByQrName.map(item => item.month),
     datasets: [
       {
         label: "Scan 1",
-        data: [90, 40, 70],
+        data: scanByQrName.map(item => item.qr1),
         borderColor: "#FF6384",
         fill: false,
       },
       {
         label: "Scan 2",
-        data: [30, 60, 50],
+        data: scanByQrName.map(item => item.qr2),
         borderColor: "#36A2EB",
         fill: false,
       },
@@ -102,24 +102,23 @@ const Dashboard3 = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* Doughnut Chart */}
       <ChartCard title="Scans by browser">
-        <div style={{ width: "250px", margin: "0 auto" }}>
-          <Doughnut data={doughnutData} options={noLabelOptions} />
-        </div>
+          <Doughnut data={doughnutData} />
+
       </ChartCard>
 
       {/* Line Chart */}
       <ChartCard title="Scans by QR name">
-        <div style={{ width: "250px", margin: "0 auto" }}>
+
           <Line data={lineData} options={axisFontOptions} />
-        </div>
+
       </ChartCard>
 
       {/* Bubble Chart */}
       <ChartCard title="Scans by time of day">
-        <Bubble data={bubbleData} options={axisFontOptions} />
+        <Bubble data={bubbleData}  />
       </ChartCard>
     </div>
   );

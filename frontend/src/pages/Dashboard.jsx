@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import MainDashboard from "../components/MainDeshboard";
 import SignoutModal from "../components/SignoutModal";
@@ -6,8 +6,11 @@ import ProfileModal from "../components/ProfileModal";
 import NavbarContext from "../context/Navbarcontext";
 const Dashboard = () => {
   const [showSignoutModal, setShowSignoutModal] = React.useState(false);
-  const [showProfileModal, setShowProfileModal] = React.useState(false );
-  
+  const [showProfileModal, setShowProfileModal] = React.useState(false);
+  useEffect(() => {
+    // Add your effect logic here
+  }, []);
+
   const confirmSignOut = () => {
     setShowProfileModal(false);
     // Add your real sign out logic here
@@ -39,10 +42,10 @@ const Dashboard = () => {
             />
           )}
           {showProfileModal && (
-             <ProfileModal
-          isOpen={showProfileModal}
-          onClose={() => setShowProfileModal(false)}
-      />
+            <ProfileModal
+              isOpen={showProfileModal}
+              onClose={() => setShowProfileModal(false)}
+            />
           )}
         </div>
       </div>

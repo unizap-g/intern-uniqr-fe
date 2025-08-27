@@ -1,0 +1,246 @@
+{
+  "summary": {
+    "totalQRCodes": 6,
+    "totalScans": 152,
+    "totalUniqueScans": 42,
+    "totalVisits": 236
+  },
+  "scansByOS": [
+    {
+      "os": "Android",
+      "scans": 58
+    },
+    {
+      "os": "iOS",
+      "scans": 72
+    },
+    {
+      "os": "Windows",
+      "scans": 22
+    }
+  ],
+  "scansByCountry": [
+    {
+      "country": "India",
+      "scans": 95
+    },
+    {
+      "country": "USA",
+      "scans": 28
+    },
+    {
+      "country": "UK",
+      "scans": 12
+    },
+    {
+      "country": "Others",
+      "scans": 17
+    }
+  ],
+  "scansByCity": [
+    {
+      "city": "Kolkata",
+      "scans": 64
+    },
+    {
+      "city": "Mumbai",
+      "scans": 38
+    },
+    {
+      "city": "Delhi",
+      "scans": 28
+    },
+    {
+      "city": "Bengaluru",
+      "scans": 22
+    }
+  ],
+  "qrCodes": [
+    {
+      "id": "QR001",
+      "title": "Café Menu",
+      "createdAt": "2025-08-10",
+      "scans": 45,
+      "uniqueScans": 16,
+      "visits": 68
+    },
+    {
+      "id": "QR002",
+      "title": "Event Ticket",
+      "createdAt": "2025-08-12",
+      "scans": 32,
+      "uniqueScans": 9,
+      "visits": 51
+    },
+    {
+      "id": "QR003",
+      "title": "Product Page",
+      "createdAt": "2025-08-13",
+      "scans": 28,
+      "uniqueScans": 7,
+      "visits": 40
+    },
+    {
+      "id": "QR004",
+      "title": "Feedback Form",
+      "createdAt": "2025-08-15",
+      "scans": 22,
+      "uniqueScans": 5,
+      "visits": 34
+    },
+    {
+      "id": "QR005",
+      "title": "Promo Poster",
+      "createdAt": "2025-08-18",
+      "scans": 15,
+      "uniqueScans": 3,
+      "visits": 24
+    },
+    {
+      "id": "QR006",
+      "title": "Portfolio Link",
+      "createdAt": "2025-08-20",
+      "scans": 10,
+      "uniqueScans": 2,
+      "visits": 19
+    }
+  ],
+  "lastUpdated": "2025-08-25",
+  "scanActivity": [
+    {
+      "date": "2025-08-01",
+      "scans": 1100
+    },
+    {
+      "date": "2025-08-03",
+      "scans": 1850
+    },
+    {
+      "date": "2025-08-07",
+      "scans": 2550
+    },
+    {
+      "date": "2025-08-09",
+      "scans": 2540
+    },
+    {
+      "date": "2025-08-11",
+      "scans": 2120
+    },
+    {
+      "date": "2025-08-13",
+      "scans": 1780
+    },
+    {
+      "date": "2025-08-15",
+      "scans": 1600
+    },
+    {
+      "date": "2025-08-17",
+      "scans": 2320
+    },
+    {
+      "date": "2025-08-19",
+      "scans": 2450
+    },
+    {
+      "date": "2025-08-21",
+      "scans": 850
+    },
+    {
+      "date": "2025-08-23",
+      "scans": 1280
+    },
+    {
+      "date": "2025-08-25",
+      "scans": 2150
+    },
+    {
+      "date": "2025-08-29",
+      "scans": 1880
+    },
+    {
+      "date": "2025-08-31",
+      "scans": 2470
+    }
+  ],
+  "scansByBrowser": [
+    {
+      "browser": "Chrome",
+      "scans": 74
+    },
+    {
+      "browser": "Safari",
+      "scans": 58
+    },
+    {
+      "browser": "Firefox",
+      "scans": 20
+    }
+  ],
+  "scansByQRName": [
+    {
+      "month": "January",
+      "qr1": -20,
+      "qr2": 95
+    },
+    {
+      "month": "February",
+      "qr1": 10,
+      "qr2": -15
+    },
+    {
+      "month": "March",
+      "qr1": 15,
+      "qr2": 55
+    }
+  ],
+  "scansByTimeOfDay": [
+    {
+      "hour": 2,
+      "scans": 80,
+      "size": 10
+    },
+    {
+      "hour": 5,
+      "scans": 25,
+      "size": 6
+    },
+    {
+      "hour": 10,
+      "scans": 95,
+      "size": 12
+    },
+    {
+      "hour": 15,
+      "scans": 70,
+      "size": 8
+    },
+    {
+      "hour": 20,
+      "scans": 55,
+      "size": 7
+    },
+    {
+      "hour": 25,
+      "scans": 85,
+      "size": 9
+    },
+    {
+      "hour": 35,
+      "scans": 65,
+      "size": 7
+    },
+    {
+      "hour": 45,
+      "scans": 100,
+      "size": 11
+    },
+    {
+      "hour": 55,
+      "scans": 40,
+      "size":5
+      
+    }
+]
+}

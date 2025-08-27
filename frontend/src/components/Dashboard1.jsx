@@ -72,7 +72,38 @@ const cityData = {
     ],
   };
 
-const Dashboard1 = () => {
+const Dashboard1 = ({ scanByOs, scanByCountry, scanByCity }) => {
+
+    const doughnutData = {
+    labels: scanByOs.map(item => item.os),
+    datasets: [
+      {
+        data: scanByOs.map(item => item.scans),
+        backgroundColor: ["#10b981", "#3b82f6", "#1e3a8a", "#f87171"],
+      },
+    ],
+  };
+
+  const countryData = {
+    labels: scanByCountry.map(item => item.country),
+    datasets: [
+      {
+        data: scanByCountry.map(item => item.scans),
+        backgroundColor: ["#60a5fa", "#f87171", "#facc15", "#34d399"],
+      },
+    ],
+  };
+
+  const cityData = {
+    labels: scanByCity.map(item => item.city),
+    datasets: [
+      {
+        data: scanByCity.map(item => item.scans),
+        backgroundColor: ["#93c5fd", "#fda4af", "#fde047", "#6ee7b7"],
+      },
+    ],
+  };
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
       <ChartCard title={"Scans by operating system"}>

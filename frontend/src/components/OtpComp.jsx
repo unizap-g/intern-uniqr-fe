@@ -44,6 +44,7 @@ const OtpComp = ({ contextPhoneNumber }) => {
         // OTP verification successful
         console.log("OTP verification successful");
         console.log(res.data);
+        localStorage.setItem("authToken", res.data.accessToken);
         setOtp("");
       } else {
 		setIsLoading(false);

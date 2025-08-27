@@ -1,38 +1,39 @@
 import React from 'react'
 import { QrCode, Printer, Gem, CircleUserRound } from 'lucide-react'
 
-const stats = [
-  {
-    title: "Total QR Codes",
-    value: 0,
-    icon: QrCode,
+
+
+const DisplayData = ({ TotalQr, Totalscan, uniqueScans, totalVisit }) => {
+  const stats = [
+    {
+      title: "Total QR Codes",
+      value: TotalQr,
+      icon: QrCode,
     bg: "bg-orange-100",
     color: "text-orange-500"
   },
   {
     title: "Total Scans",
-    value: 6,
+    value: Totalscan,
     icon: Printer,
     bg: "bg-pink-100",
     color: "text-pink-500"
   },
   {
     title: "Total Unique Scans",
-    value: 0,
+    value: uniqueScans,
     icon: Gem,
     bg: "bg-blue-100",
     color: "text-blue-500"
   },
   {
     title: "Total Visits",
-    value: 6,
+    value: totalVisit,
     icon: CircleUserRound,
     bg: "bg-green-100",
     color: "text-green-500"
   }
 ]
-
-const DisplayData = () => {
   return (
     <div className="w-full h-[20%] bg-white p-2 rounded-xl flex gap-16">
       {stats.map((item, index) => (

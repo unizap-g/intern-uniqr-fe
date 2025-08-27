@@ -3,13 +3,24 @@ import Loading from "./components/Loading";
 import Auth from "./pages/Auth";
 import Temp from "./components/OtpBox";
 import Dashboard from "./pages/Dashboard";
-import { Router, Route,Routes } from "react-router-dom";
+import { Router, Route, Routes } from "react-router-dom";
+import VerifyWrapper from "./Wrapper/verifyWrapper";
+import {VerifyProvider} from './context/VerifyContext';
 const App = () => {
   return (
-     <Routes>
-      <Route path="/" element={<Auth />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+    <VerifyProvider>
+      <Routes>
+        <Route path="/" element={<Auth />} />
+        <Route
+        path="/dashboard"
+        element={
+          <VerifyWrapper>
+            <Dashboard />
+           </VerifyWrapper>
+        }
+      />
     </Routes>
+    </VerifyProvider>
   );
 };
 
