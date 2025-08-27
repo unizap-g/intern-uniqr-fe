@@ -6,16 +6,18 @@ import QrSelect from './QrSelect'
 import MonthOption from './MonthOption'
 const MainDashboard = () => {
   return (
-    <div className="bg-blue-100 w-4/5 h-screen p-5">
+    <div className="bg-blue-50 w-4/5 h-[200vh]">
       <Navbar />
-      <div className="flex justify-between items-center gap-4 w-full">
+      <div className='p-8'>
+        <div className="flex justify-between items-center w-full">
         <QrSelect />
         <MonthOption />
       </div>
-      <div className='mt-5 mb-5'>
+      <div className='mt-8 mb-8'>
         <DisplayData />
       </div>
       <Dashboard3 />
+      </div>
     </div>
   )
 }

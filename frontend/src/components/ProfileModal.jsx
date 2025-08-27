@@ -7,7 +7,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
   return (
     <>
     {isOpen && (
-        <div className="absolute inset-0 w-full h-[95vh] bg-white/30 backdrop-blur-sm">
+        <div className="fixed inset-0 w-full h-full z-20 bg-white/30 backdrop-blur-sm">
         </div>
     )}
 

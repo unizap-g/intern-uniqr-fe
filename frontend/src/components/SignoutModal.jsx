@@ -2,6 +2,11 @@ import React from 'react'
 
 const SignoutModal = ({ isOpen, onClose, onConfirm }) => {
   return (
+    <>
+    {isOpen && (
+        <div className="fixed z-20 inset-0 w-full h-full bg-white/30 backdrop-blur-sm">
+        </div>
+    )}
     <div
       className={`fixed inset-0 flex items-center justify-center z-50 transition-all duration-300 ${
         isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
@@ -32,7 +37,9 @@ const SignoutModal = ({ isOpen, onClose, onConfirm }) => {
         </div>
       </div>
     </div>
-  );
+
+  </>
+    );
 };
 
 export default SignoutModal;

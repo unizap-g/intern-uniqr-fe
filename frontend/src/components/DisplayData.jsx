@@ -34,7 +34,7 @@ const stats = [
 
 const DisplayData = () => {
   return (
-    <div className="w-full h-[20%] bg-white mt-24 p-2 rounded-xl flex gap-16">
+    <div className="w-full h-[20%] bg-white p-2 rounded-xl flex gap-16">
       {stats.map((item, index) => (
         <div
           key={index}

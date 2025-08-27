@@ -15,7 +15,7 @@ const optionsData = [
 ];
 const Sidebar = () => {
   return (
-    <div className='flex flex-col h-full p-5 min-h-screen w-1/5'>
+    <div className=' shadow shadow-2xl flex sticky top-0 flex-col p-5 h-screen w-1/5 '>
       <div className='text-white font-bold mb-20'>
         <AuthHeader firstText="Intern" secondText="Scan" className="ml-2" />
       </div>

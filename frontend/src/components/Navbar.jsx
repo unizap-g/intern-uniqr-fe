@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-import SignoutModal from "./SignoutModal";
-import ProfileModal from "./ProfileModal";
 
+import "../components/comp.css";
+import { useNavbar } from "../hooks/useNavbar";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
+  const { showSignoutModal, setShowSignoutModal, showProfileModal, setShowProfileModal } = useNavbar();
+//   const [profileOpen, setProfileOpen] = useState(false);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -22,26 +22,26 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleSignOut = () => {
-    setModalOpen(true);
-    setIsOpen(false);
-  };
+//   const handleSignOut = () => {
+//     setModalOpen(true);
+//     setIsOpen(false);
+//   };
 
-  const confirmSignOut = () => {
-    setModalOpen(false);
-    // Add your real sign out logic here
-    alert("Signed Out!");
-  };
+//   const confirmSignOut = () => {
+//     setModalOpen(false);
+//     // Add your real sign out logic here
+//     alert("Signed Out!");
+//   };
 
   const handleProfile = () => {
-    setProfileOpen(true);
+    setShowProfileModal(true);
     setIsOpen(false);
   };
 
   return (
-    <div className="flex items-center justify-between mb-3 relative">
+    <div className="px-8 flex items-center sticky top-0 blurBg z-10 h-20 mt-0 bg-white/30 justify-between mb-3 ">
       <div className="font-bold text-2xl">
-        {profileOpen ? "Manage Account" : "Dashboard"}
+        {showProfileModal ? "Manage Account" : "Dashboard"}
       </div>
 
       <div ref={dropdownRef} className="relative">
@@ -68,7 +68,7 @@ const Navbar = () => {
         </button>
 
         <div
-          className={`absolute right-0 mt-2 w-56 mr-8 bg-white border-0 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform z-1 ${
+          className={`absolute right-0 mt-2 w-56 mr-8 bg-white border-0 shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform z-1 ${
             isOpen
               ? "max-h-96 opacity-100 scale-100"
               : "max-h-0 opacity-0 scale-95"
@@ -92,7 +92,11 @@ const Navbar = () => {
             </li>
             <li
               className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
-              onClick={handleSignOut}
+              onClick={()=>{
+                setShowSignoutModal(true);
+                setShowProfileModal(false);
+                setIsOpen(false);
+              }}
             >
               Sign Out
             </li>
@@ -100,16 +104,16 @@ const Navbar = () => {
         </div>
       </div>
 
-      <SignoutModal
+      {/* <SignoutModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={confirmSignOut}
-      />
+      /> */}
 
-      <ProfileModal
+      {/* <ProfileModal
         isOpen={profileOpen}
         onClose={() => setProfileOpen(false)}
-      />
+      /> */}
     </div>
   );
 };
