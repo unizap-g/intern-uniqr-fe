@@ -4,7 +4,7 @@ import Auth from "./pages/Auth";
 import Temp from "./components/OtpBox";
 import Dashboard from "./pages/Dashboard";
 import { Router, Route, Routes } from "react-router-dom";
-import VerifyWrapper from "./Wrapper/verifyWrapper";
+import VerifyWrapper from "./Wrapper/verifyWrapper.jsx";
 import {VerifyProvider} from './context/VerifyContext';
 const App = () => {
   return (
