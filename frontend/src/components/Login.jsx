@@ -18,7 +18,7 @@ const Login = () => {
 
   const onNumberChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
-    console.log(value);
+    // console.log(value);
     if(value.startsWith("0")){
       setErrormsg("Number can't start with 0");
       setisError(true);
@@ -39,7 +39,7 @@ const Login = () => {
   const HandleLogin = async (e) => {
     e.preventDefault();
     if (phoneNumber.length !== 10) {
-      console.log(phoneNumber);
+      // console.log(phoneNumber);
       setisError(true);
       setErrormsg("Please enter a valid 10-digit phone number.");
       return;
@@ -143,7 +143,7 @@ const Login = () => {
                 Don't have an account?{" "}
                 <button
                   onClick={() => {
-                    console.log("clicked");
+                    // console.log("clicked");
                     setActiveComp("signup");
                   }}
                   className="text-blue-500 cursor-pointer"

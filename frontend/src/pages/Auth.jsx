@@ -11,7 +11,7 @@ const Auth = () => {
   const [isLoading,setIsLoading]=useState(false);
   const [prevComp, setPrevComp] = useState("login");
   const [contextPhoneNumber, setContextPhoneNumber] = useState("");
-  console.log(activeComp);
+  // console.log(activeComp);
   return (
     // const []
     <AuthContext.Provider

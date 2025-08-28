@@ -38,13 +38,15 @@ const OtpComp = ({ contextPhoneNumber }) => {
         mobileNumber: contextPhoneNumber,
         otp: otp,
       });
+      console.log(res.data);
       if (res.status === 201) {
         setIsLoading(false);
         navigate("/dashboard");
         // OTP verification successful
         console.log("OTP verification successful");
         console.log(res.data);
-        localStorage.setItem("authToken", res.data.accessToken);
+        localStorage.setItem("uuidApiKey",res.data.uuidApiKey);
+        localStorage.setItem("uId",res.data.userId);
         setOtp("");
       } else {
 		setIsLoading(false);
@@ -63,7 +65,7 @@ const OtpComp = ({ contextPhoneNumber }) => {
   return (
     <div className="flex-1 h-screen bg-white  flex justify-center ">
       <div className="flex px-10 md:px-0 flex-col gap-3 w-full md:w-[60%] mt-20 md:mt-40">
-        <AuthHeader firstText="biz" secondText="scan" />
+        <AuthHeader firstText="Intern" secondText="scan" />
         <div className="flex items-center gap-2  mt-10">
           <div
             onClick={() => setActiveComp(prevComp)}

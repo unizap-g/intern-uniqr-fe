@@ -29,10 +29,10 @@ const Dashboard = () => {
         setShowSignoutModal,
       }}
     >
-      <div className="min-h-screen w-full flex ">
+      <div className="min-h-screen w-full flex bg-blue-50 ">
         <Sidebar />
         {/* <MainContent /> */}
-        <MainDashboard className="w-4/5" />
+        <MainDashboard />
         <div>
           {showSignoutModal && (
             <SignoutModal

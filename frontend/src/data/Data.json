@@ -1,10 +1,4 @@
 {
-  "summary": {
-    "totalQRCodes": 6,
-    "totalScans": 152,
-    "totalUniqueScans": 42,
-    "totalVisits": 236
-  },
   "scansByOS": [
     {
       "os": "Android",
@@ -56,6 +50,14 @@
     }
   ],
   "qrCodes": [
+    {
+      "id": "QR001",
+      "title": "Café Menu",
+      "createdAt": "2025-08-10",
+      "scans": 45,
+      "uniqueScans": 16,
+      "visits": 68
+    },
     {
       "id": "QR001",
       "title": "Café Menu",
@@ -171,7 +173,7 @@
     },
     {
       "browser": "Safari",
-      "scans": 58
+      "scans": 585
     },
     {
       "browser": "Firefox",
@@ -181,13 +183,13 @@
   "scansByQRName": [
     {
       "month": "January",
-      "qr1": -20,
+      "qr1": 20,
       "qr2": 95
     },
     {
       "month": "February",
-      "qr1": 10,
-      "qr2": -15
+      "qr1": 44,
+      "qr2": 45
     },
     {
       "month": "March",
