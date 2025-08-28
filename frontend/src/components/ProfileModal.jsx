@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const ProfileModal = ({ isOpen, onClose }) => {
-	const [gender, setGender] = useState("male");
+	const [gender, setGender] = useState("");
 
 	// Validation Schema with Yup
 	const validationSchema = Yup.object({
@@ -12,6 +12,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
 			.required("Full Name is required")
 			.matches(/^[A-Za-z\s]+$/, "Full Name must only contain letters"),
 		mobile: Yup.string()
+			// .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
 			.matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
 			.required("Mobile number is required"),
 		email: Yup.string().email("Invalid email").required("Email is required"),
@@ -22,6 +23,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
 		confirmPassword: Yup.string()
 			.oneOf([Yup.ref("password"), null], "Passwords must match")
 			.required("Confirm Password is required"),
+		gender: Yup.string().required("Please specify your gender"),
 	});
 
 	// Formik
@@ -33,6 +35,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
 			dob: "",
 			password: "",
 			confirmPassword: "",
+			gender: "",
 		},
 		validationSchema,
 		onSubmit: (values) => {
@@ -67,7 +70,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
 								className="w-16 h-16 rounded-full"
 							/>
 							<div>
-								<p className="font-semibold">New User</p>
+								<p className="font-semibold">{formik.values.fullName}</p>
 								<p className="text-gray-500 text-sm">{formik.values.mobile}</p>
 							</div>
 						</div>
@@ -83,6 +86,11 @@ const ProfileModal = ({ isOpen, onClose }) => {
 							<input
 								type="text"
 								name="fullName"
+								onKeyDown={(e) => {
+									if (!/^[A-Za-z\s]$/.test(e.key)) {
+										e.preventDefault(); // blocks numbers & special characters
+									}
+								}}
 								onChange={formik.handleChange}
 								onBlur={formik.handleBlur}
 								value={formik.values.fullName}
@@ -100,6 +108,11 @@ const ProfileModal = ({ isOpen, onClose }) => {
 								<input
 									type="text"
 									name="mobile"
+									maxLength={10}
+									onInput={(e) => {
+										e.target.value = e.target.value.replace(/[^0-9]/g, ""); // blocks letters/symbols
+										formik.setFieldValue("mobile", e.target.value);
+									}}
 									onChange={formik.handleChange}
 									onBlur={formik.handleBlur}
 									value={formik.values.mobile}
@@ -187,7 +200,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
 									<label
 										key={g}
 										className={
-											gender === g
+											formik.values.gender === g
 												? "text-blue-600 font-semibold"
 												: "text-gray-700"
 										}
@@ -195,14 +208,18 @@ const ProfileModal = ({ isOpen, onClose }) => {
 										<input
 											type="radio"
 											name="gender"
+											value={g}
 											className="mr-1 hover:cursor-pointer"
-											checked={gender === g}
-											onChange={() => setGender(g)}
+											checked={formik.values.gender === g}
+											onChange={formik.handleChange}
 										/>
 										{g.charAt(0).toUpperCase() + g.slice(1)}
 									</label>
 								))}
 							</div>
+							{formik.touched.gender && formik.errors.gender && (
+								<p className="text-red-500 text-sm">{formik.errors.gender}</p>
+							)}
 						</div>
 
 						{/* Buttons */}
