@@ -2,12 +2,42 @@ import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import SignoutModal from "./SignoutModal";
 import ProfileModal from "./ProfileModal";
+import axios from "../axiosConfig";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [user, setUser] = useState({
+    fullName: "New User",
+    phone: "",
+    email: "",
+    dateOfBirth: "",
+    gender: "male",
+  });
+
+  //fetch user info
+  useEffect(()=>{
+    const fetchUser = async()=>{
+      try{
+        const uid = localStorage.getItem("uuidApiKey");
+        const res = await axios.get(`/users/${uid}`); //backend api
+        const userData = res.data.user;
+        setUser({
+          fullName: userData.name || "New User",
+          phone: userData.phone,
+          email: userData.email || "",
+          dateOfBirth: userData.dateOfBirth || "",
+          gender: userData.gender || "male",
+        });
+        localStorage.setItem("userId", userData._id);
+      } catch(err){
+        console.error("Error fetching user data", err);
+      }
+    }
+    fetchUser();
+  }, [])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -22,16 +52,19 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleSignOut = () => {
-    setModalOpen(true);
-    setIsOpen(false);
+  const confirmSignOut = async() => {
+    try{
+      const uid = localStorage.getItem("uuidApiKey");
+      await axios.post(`/users/${uid}/signout`)
+      localStorage.removeItem('token');
+      localStorage.removeItem('uid');
+      window.location.href = '/login';
+    }
+    catch (err) {
+      console.error('Error signing out:', err);
+    }
   };
 
-  const confirmSignOut = () => {
-    setModalOpen(false);
-    // Add your real sign out logic here
-    alert("Signed Out!");
-  };
 
   const handleProfile = () => {
     setProfileOpen(true);
@@ -56,8 +89,8 @@ const Navbar = () => {
           />
 
           <div className="text-left">
-            <p className="text-sm font-semibold">New User</p>
-            <p className="text-xs text-gray-500">8101467223</p>
+            <p className="text-sm font-semibold">{user.fullName}</p>
+            <p className="text-xs text-gray-500">{user.phone}</p>
           </div>
 
           <ChevronDown
@@ -92,7 +125,10 @@ const Navbar = () => {
             </li>
             <li
               className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
-              onClick={handleSignOut}
+              onClick={() => { 
+                setModalOpen(true); 
+                setIsOpen(false); 
+              }}
             >
               Sign Out
             </li>
@@ -109,9 +145,12 @@ const Navbar = () => {
       <ProfileModal
         isOpen={profileOpen}
         onClose={() => setProfileOpen(false)}
+        user={user}
+        setUser={setUser}
       />
     </div>
   );
 };
 
 export default Navbar;
+``
