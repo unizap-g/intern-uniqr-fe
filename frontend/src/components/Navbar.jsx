@@ -67,7 +67,6 @@ const Navbar = () => {
     }
   };
 
-
   const handleProfile = () => {
     setProfileOpen(true);
     setIsOpen(false);
