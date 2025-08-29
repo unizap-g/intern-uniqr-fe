@@ -3,7 +3,7 @@ import { ChevronDown } from "lucide-react";
 import SignoutModal from "./SignoutModal";
 import ProfileModal from "./ProfileModal";
 import axios from "axios";
-
+import './comp.css'
 
 const Navbar = () => {
   const URL = import.meta.env.VITE_API_URL;
@@ -23,7 +23,7 @@ const Navbar = () => {
   useEffect(()=>{
     const fetchUser = async()=>{
       try{
-        const uid = localStorage.getItem("uuidApiKey");
+        const uid = localStorage.getItem("uId");
         const res = await axios.get(`${URL}/users/${uid}`); //backend api
         const userData = res.data.user;
         setUser({
@@ -74,7 +74,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex items-center justify-between mb-3 relative">
+    <div className="px-8 flex items-center sticky top-0 blurBg z-10 h-15 mt-0 bg-white/30 justify-between mb-3">
       <div className="font-bold text-2xl">
         {profileOpen ? "Manage Account" : "Dashboard"}
       </div>
