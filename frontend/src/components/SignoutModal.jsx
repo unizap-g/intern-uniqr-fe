@@ -14,7 +14,7 @@ const SignoutModal = ({ isOpen, onClose, onConfirm }) => {
       style={{ background: isOpen ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0)' }}
     >
       <div
-        className={`bg-white rounded-lg shadow-lg w-96 p-6 transform transition-all duration-300 ${
+        className={`bg-white rounded-lg shadow-lg w-96 p-6 mt-150 transform transition-all duration-300 ${
           isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
         }`}
       >

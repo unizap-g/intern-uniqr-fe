@@ -85,20 +85,18 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
     <>
       {/* Background Blur */}
       <div className="absolute inset-0 w-full h-[95vh] bg-white/30 backdrop-blur-sm"></div>
-
       <div
-        className={`fixed inset-0 flex items-center justify-center z-50 transition-all duration-300 ${
+        className={`fixed inset-0 flex items-start justify-center z-50 transition-all duration-300 ${
           isOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         }`}
         style={{ background: isOpen ? "rgba(0,0,0,0.05)" : "rgba(0,0,0,0)" }}
       >
-        <div
-          className={`relative bg-white w-full max-w-lg rounded-2xl shadow-lg p-6 z-10 ml-40 transform transition-all duration-300 ${
-            isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
-          }`}
-        >
+         
+        <div className={`bg-white w-full max-w-lg sm:max-w-md rounded-2xl shadow-lg p-4 sm:p-6 z-10 mx-4 mt-6 mr-6 transform transition-all duration-300 ${
+        isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+        }`}>
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
