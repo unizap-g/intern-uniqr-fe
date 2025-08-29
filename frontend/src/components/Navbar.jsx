@@ -75,6 +75,9 @@ const Navbar = () => {
 
   return (
     <div className="px-8 flex items-center sticky top-0 blurBg z-10 h-15 mt-0 bg-white/30 justify-between mb-3">
+      <div>
+        
+      </div>
       <div className="font-bold text-2xl">
         {profileOpen ? "Manage Account" : "Dashboard"}
       </div>
