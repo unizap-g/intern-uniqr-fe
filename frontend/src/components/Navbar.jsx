@@ -1,45 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import { ChevronDown } from "lucide-react";
-import SignoutModal from "./SignoutModal";
-import ProfileModal from "./ProfileModal";
-import axios from "axios";
-import './comp.css'
-
+import { useIsLogin } from "../hooks/useIsLogin";
+import "../components/comp.css";
+import { useNavbar } from "../hooks/useNavbar";
 const Navbar = () => {
-  const URL = import.meta.env.VITE_API_URL;
+  const {userDetails}=useIsLogin()
+  console.log(userDetails)
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [user, setUser] = useState({
-    fullName: "New User",
-    phone: "",
-    email: "",
-    dateOfBirth: "",
-    gender: "male",
-  });
-
-  //fetch user info
-  useEffect(()=>{
-    const fetchUser = async()=>{
-      try{
-        const uid = localStorage.getItem("uId");
-        const res = await axios.get(`${URL}/users/${uid}`); //backend api
-        const userData = res.data.user;
-        setUser({
-          fullName: userData.name || "New User",
-          phone: userData.phone,
-          email: userData.email || "",
-          dateOfBirth: userData.dateOfBirth || "",
-          gender: userData.gender || "male",
-        });
-        localStorage.setItem("userId", userData._id);
-      } catch(err){
-        console.error("Error fetching user data", err);
-      }
-    }
-    fetchUser();
-  }, [])
+  const { showSignoutModal, setShowSignoutModal, showProfileModal, setShowProfileModal } = useNavbar();
+//   const [profileOpen, setProfileOpen] = useState(false);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -54,32 +24,26 @@ const Navbar = () => {
     };
   }, []);
 
-  const confirmSignOut = async() => {
-    try{
-      const uid = localStorage.getItem("uuidApiKey");
-      await axios.post(`/users/${uid}/signout`)
-      localStorage.removeItem('token');
-      localStorage.removeItem('uid');
-      window.location.href = '/login';
-    }
-    catch (err) {
-      console.error('Error signing out:', err);
-    }
-  };
+//   const handleSignOut = () => {
+//     setModalOpen(true);
+//     setIsOpen(false);
+//   };
 
+//   const confirmSignOut = () => {
+//     setModalOpen(false);
+//     // Add your real sign out logic here
+//     alert("Signed Out!");
+//   };
 
   const handleProfile = () => {
-    setProfileOpen(true);
+    setShowProfileModal(true);
     setIsOpen(false);
   };
 
   return (
-    <div className="px-8 flex items-center sticky top-0 blurBg z-10 h-15 mt-0 bg-white/30 justify-between mb-3">
-      <div>
-        
-      </div>
+    <div className="px-8 flex items-center sticky top-0 blurBg z-10 h-20 mt-0 bg-white/30 justify-between mb-3 ">
       <div className="font-bold text-2xl">
-        {profileOpen ? "Manage Account" : "Dashboard"}
+        {showProfileModal ? "Manage Account" : "Dashboard"}
       </div>
 
       <div ref={dropdownRef} className="relative">
@@ -94,8 +58,8 @@ const Navbar = () => {
           />
 
           <div className="text-left">
-            <p className="text-sm font-semibold">{user.fullName}</p>
-            <p className="text-xs text-gray-500">{user.phone}</p>
+            <p className="text-sm font-semibold">{userDetails?.fullName || "New User"}</p>
+            <p className="text-xs text-gray-500">{userDetails?.mobileNumber || ""}</p>
           </div>
 
           <ChevronDown
@@ -106,7 +70,7 @@ const Navbar = () => {
         </button>
 
         <div
-          className={`absolute right-0 mt-2 w-56 mr-8 bg-white border-0 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform z-1 ${
+          className={`absolute right-0 mt-2 w-56 mr-8 bg-white border-0 shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform z-1 ${
             isOpen
               ? "max-h-96 opacity-100 scale-100"
               : "max-h-0 opacity-0 scale-95"
@@ -130,9 +94,10 @@ const Navbar = () => {
             </li>
             <li
               className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
-              onClick={() => { 
-                setModalOpen(true); 
-                setIsOpen(false); 
+              onClick={()=>{
+                setShowSignoutModal(true);
+                setShowProfileModal(false);
+                setIsOpen(false);
               }}
             >
               Sign Out
@@ -141,18 +106,16 @@ const Navbar = () => {
         </div>
       </div>
 
-      <SignoutModal
+      {/* <SignoutModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={confirmSignOut}
-      />
+      /> */}
 
-      <ProfileModal
+      {/* <ProfileModal
         isOpen={profileOpen}
         onClose={() => setProfileOpen(false)}
-        user={user}
-        setUser={setUser}
-      />
+      /> */}
     </div>
   );
 };

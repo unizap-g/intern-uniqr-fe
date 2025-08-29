@@ -3,27 +3,28 @@ import Auth from "./pages/Auth";
 
 import Dashboard from "./pages/Dashboard";
 import { Router, Route, Routes } from "react-router-dom";
-import VerifyWrapper from "./components/VerifyWrapper.jsx";
+import IsLoginContext from "./context/isLoginContext.jsx";
 import {VerifyProvider} from './context/VerifyContext';
 import UnderConstructionPage from "./pages/UndercunstructionPage.jsx";
-import LoginWrapper from './components/LoginWrapper.jsx';
+import { useState } from "react";
+
 const App = () => {
+
+  const [userDetails, setUserDetails] = useState(null);
   return (
     <VerifyProvider>
-      <Routes>
-        <Route path="/login" element={<LoginWrapper><Auth /></LoginWrapper>} />
-        <Route
-        path="/dashboard"
-        element={
-          <VerifyWrapper>
-            <Dashboard />
-           </VerifyWrapper>
-        }
-      />
-      <Route path='*' element={<VerifyWrapper><UnderConstructionPage /></VerifyWrapper>} />
-    </Routes>
-  </VerifyProvider>
-);
+      <IsLoginContext value={{ userDetails, setUserDetails }}>
+        <Routes>
+          <Route path="/login" element={<Auth />} />
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+          <Route path='*' element={<Dashboard/>} />
+        </Routes>
+      </IsLoginContext>
+    </VerifyProvider>
+  );
 };
 
 export default App;
