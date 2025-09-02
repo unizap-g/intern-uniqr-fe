@@ -10,6 +10,7 @@ const SignupComp = () => {
   const [iserror, setisError] = useState(false);
   const [errormsg, setErrormsg] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const URL = import.meta.env.VITE_API_URL;
   // onNumberChangefunction
   const onNumberChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
