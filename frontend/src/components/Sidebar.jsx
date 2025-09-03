@@ -5,17 +5,17 @@ import Options from './Options';
 import { LayoutDashboard, QrCode, MessageCircleQuestionMark, BookImage, UsersRound, Settings, Wallet, Headset } from 'lucide-react';
 const optionsData = [
   { text: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { text: "Generate QR", icon: QrCode, path: "/generate-qr" },
-  { text: "Help", icon: MessageCircleQuestionMark, path: "/help" },
-  { text: "About", icon: BookImage, path: "/about" },
-  { text: "Users", icon: UsersRound, path: "/users" },
+  { text: "My QR Codes", icon: QrCode, path: "/my-qr-codes" },
+  { text: "Enquiry", icon: MessageCircleQuestionMark, path: "/enquiry" },
+  { text: "Catalogue", icon: BookImage, path: "/catalogue" },
+  { text: "Customers", icon: UsersRound, path: "/customers" },
   { text: "Settings", icon: Settings, path: "/settings" },
-  { text: "Wallet", icon: Wallet, path: "/wallet" },
+  { text: "Plans & Pricing", icon: Wallet, path: "/plans-and-pricing" },
   { text: "Support", icon: Headset, path: "/support" },
 ];
 const Sidebar = () => {
   return (
-    <div className=' shadow shadow-2xl hidden md:flex sticky top-0 flex-col p-5 h-screen w-1/5 '>
+    <div className=' shadow shadow-2xl hidden md:flex sticky top-0 flex-col p-5 h-screen w-1/5 bg-white '>
       <div className='text-white font-bold mb-20'>
         <AuthHeader firstText="Intern" secondText="Scan" className="ml-2" />
       </div>

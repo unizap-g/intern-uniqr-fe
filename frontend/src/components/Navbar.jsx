@@ -3,12 +3,12 @@ import { ChevronDown } from "lucide-react";
 import { useIsLogin } from "../hooks/useIsLogin";
 import "../components/comp.css";
 import { useNavbar } from "../hooks/useNavbar";
-const Navbar = () => {
+const Navbar = ({ title = "Dashboard" }) => {
   const {userDetails}=useIsLogin()
   console.log(userDetails)
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { showSignoutModal, setShowSignoutModal, showProfileModal, setShowProfileModal } = useNavbar();
+  const { setShowSignoutModal, showProfileModal, setShowProfileModal } = useNavbar();
 //   const [profileOpen, setProfileOpen] = useState(false);
 
   // Close dropdown when clicking outside
@@ -43,7 +43,7 @@ const Navbar = () => {
   return (
     <div className="px-8 flex items-center sticky top-0 blurBg z-10 h-20 mt-0 bg-white/30 justify-between mb-3 ">
       <div className="font-bold text-2xl">
-        {showProfileModal ? "Manage Account" : "Dashboard"}
+        {showProfileModal ? "Manage Account" : title}
       </div>
 
       <div ref={dropdownRef} className="relative">

@@ -3,7 +3,8 @@ import Sidebar from "../components/Sidebar";
 import MainDashboard from "../components/MainDeshboard";
 import SignoutModal from "../components/SignoutModal";
 import ProfileModal from "../components/ProfileModal";
-import NavbarContext from "../context/Navbarcontext";
+import NavbarContext from "../context/NavbarContext";
+import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useIsLogin } from "../hooks/useIsLogin";
@@ -92,8 +93,10 @@ const confirmSignOut = async () => {
     >
       <div className="min-h-screen w-full flex bg-blue-50 ">
         <Sidebar />
-        {/* <MainContent /> */}
-        <MainDashboard />
+        <div className="flex-1 flex flex-col">
+          <Navbar title="Dashboard" />
+          <MainDashboard />
+        </div>
         <div>
           {showSignoutModal && (
             <SignoutModal
