@@ -14,7 +14,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isOTP, setIsOTP] = useState(true);
-  // const URL = import.meta.env.VITE_API_URL;
   const URL = import.meta.env.VITE_API_URL;
 
   const onNumberChange = (e) => {

@@ -315,7 +315,25 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 			.required("Full Name is required")
 			.matches(/^[A-Za-z\s]+$/, "Full Name must only contain letters"),
 		email: Yup.string().email("Invalid email").required("Email is required"),
-		dateOfBirth: Yup.date().required("Date of Birth is required"),
+		// dateOfBirth: Yup.date().required("Date of Birth is required"),
+		dateOfBirth: Yup.string()
+			.required("Date of Birth is required")
+			.matches(
+				/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+				"Date of Birth must be in yyyy-mm-dd format"
+			)
+			.max(new Date(), "Date of Birth cannot be in the future")
+			.test("not-in-future", "Date of Birth cannot be in the future", (val) => {
+				if (!val) return false;
+				const [y, m, d] = val.split("-").map(Number);
+				const dob = new Date(y, m - 1, d);
+				if (Number.isNaN(dob.getTime())) return false;
+				const today = new Date();
+				// Normalize time for a pure date compare
+				dob.setHours(0, 0, 0, 0);
+				today.setHours(0, 0, 0, 0);
+				return dob <= today;
+			}),
 		gender: Yup.string().required("Please specify your gender"),
 	});
 
@@ -323,8 +341,8 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 	const formik = useFormik({
 		initialValues: {
 			fullName: "",
-			phone: "", // read-only, keep it here
 			email: "",
+			phone: "",
 			dateOfBirth: "",
 			gender: "",
 			password: "", // not editable
@@ -383,30 +401,46 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 		// 	}
 		// },
 		onSubmit: async (values) => {
-			console.log("Submitting data:", values);  // ✅ log here
+			console.log("Submitting data:", values);
 			try {
 				if (!user?._id) {
 					alert("User not found, please try again");
 					return;
 				}
 
+				// format yyyy-mm-dd → dd-mm-yyyy
+				const formatDate = (dateStr) => {
+					if (!dateStr) return "";
+					const [year, month, day] = dateStr.split("-");
+					return `${day}-${month}-${year}`;
+				};
+
 				const updatedData = {
 					fullName: values.fullName,
 					email: values.email,
-					dateOfBirth: values.dateOfBirth,
+					dateOfBirth: formatDate(values.dateOfBirth),
 					gender: values.gender,
-					phone: values.phone, // read-only
+					// phone: values.phone, // read-only
 				};
 
-				const apiKey = localStorage.getItem("uuidApiKey");
-				if (!apiKey) {
-					alert("Unauthorized. Please login again.");
+				// get API key
+				const uuidApiKey = localStorage.getItem("uuidApiKey");
+				if (!uuidApiKey) {
+					console.error("API key missing. Cannot update profile.");
+					alert("Session expired. Please log in again.");
 					return;
 				}
 
+				console.log("PATCH Body:", updatedData);
+				console.log("PATCH Headers:", {
+					"x-api-key": uuidApiKey,
+					"Content-Type": "application/json",
+				});
+
+				// send request
 				const res = await axios.patch(`${URL}/user/profile`, updatedData, {
 					headers: {
-						"x-api-key": apiKey,
+						"x-api-key": uuidApiKey,
 						"Content-Type": "application/json",
 					},
 				});
@@ -414,9 +448,9 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 				// update local user state
 				setUser(res.data.user);
 
-				// if backend issues new apiKey, update it in localStorage
-				if (res.data.uuidToken) {
-					localStorage.setItem("uuidApiKey", res.data.uuidToken);
+				// update apiKey if backend sends a fresh one
+				if (res.data.uuidApiKey) {
+					localStorage.setItem("uuidApiKey", res.data.uuidApiKey);
 				}
 
 				onClose();
@@ -508,12 +542,13 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 						<div className="flex-1">
 							<label className="block text-gray-700 mb-1">Mobile</label>
 							<input
-								type="text"
+								type="number"
 								name="phone"
 								value={formik.values.phone}
 								readOnly
 								className="w-full border border-gray-200 rounded-lg px-3 py-2 bg-gray-100 cursor-not-allowed"
-							/>
+							/> 
+
 						</div>
 						<div className="flex-1">
 							<label className="block text-gray-700 mb-1">Email</label>
@@ -534,9 +569,18 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 					{/* DOB */}
 					<div>
 						<label className="block text-gray-700 mb-1">Date of Birth</label>
+						{/* <input
+							type="date"
+							name="dateOfBirth"
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+							value={formik.values.dateOfBirth}
+							className="w-full border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+						/> */}
 						<input
 							type="date"
 							name="dateOfBirth"
+							placeholder="dd-mm-yyyy"
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
 							value={formik.values.dateOfBirth}
