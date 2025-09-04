@@ -68,14 +68,11 @@ const ViewQR = () => {
   useEffect(() => {
     const fetchQrData = async () => {
       try {
-        const res = await axios.get(`${URL}}qr/qr-list`,{
-          headers: {
-            "x-api-key": localStorage.getItem("uuidApiKey") || "",
-          }
-        });
-        if (res.data && res.data.data) {
-          // setQrData(res.data.data);
-          console.log("Fetched QR Data:", res.data.data);
+        const res = await axios.get(`${URL}/qr/qr-list/${localStorage.getItem("userId") || ""}`);
+        console.log("QR Data Response:", res.data);
+        if (res.data && res.data.qrList) {
+          setQrData(res.data.qrList || []);
+          console.log("Fetched QR Data:", res.data.qrList);
         }
       } catch (error) {
         console.error("Error fetching QR data:", error);

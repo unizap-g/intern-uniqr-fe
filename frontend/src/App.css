@@ -21,3 +21,25 @@ input[type=number] {
   scrollbar-width: none;     /* Firefox */
 }
 
+.blurBg {
+  /* background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10.1px);
+  -webkit-backdrop-filter: blur(10.1px); */
+
+
+
+
+  background: rgba(255, 255, 255, 0);
+
+
+backdrop-filter: blur(7px);
+-webkit-backdrop-filter: blur(7px);
+
+
+
+
+
+}
+
+
+

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 export default function CompleteComp({url,baseQr, isOpen, onClose, onPay }) {
+  const navigate = useNavigate();
   const [showSlider, setShowSlider] = useState(false);
   const [size, setSize] = useState(500); // default 500x500
   const [isCustomSize, setIsCustomSize] = useState(false);
@@ -40,6 +41,7 @@ const handleDownload = (base64Data,fileName='qr-code.png') => {
 
       // Release memory
       URL.revokeObjectURL(link.href);
+      navigate("/dashboard/qrdetails");
     } catch (error) {
       console.error("Download failed:", error);
     }
@@ -57,7 +59,9 @@ const handleDownload = (base64Data,fileName='qr-code.png') => {
     const qrUrl = url; // replace with your QR link
     navigator.clipboard.writeText(qrUrl).then(() => {
       setShareMsg(`✅ URL ${qrUrl} copied to clipboard!`);
-      setTimeout(() => setShareMsg(""), 3000); // remove after 3 sec
+      setTimeout(() => {setShareMsg("")
+        navigate("/dashboard/qrdetails");
+      }, 3000); // remove after 3 sec
     });
   };
 
@@ -66,7 +70,7 @@ const handleDownload = (base64Data,fileName='qr-code.png') => {
       <div className="bg-white rounded-2xl relative shadow-xl w-[90%] sm:w-[420px] p-6 text-center animate-fadeIn">
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={ ()=>{ onClose(); navigate("/dashboard/qrdetails");}}
           className="absolute top-4 right-4 p-1 rounded-full hover:bg-red-100 transition active:scale-90"
         >
           <X className="h-6 w-6 text-red-500" />

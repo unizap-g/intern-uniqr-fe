@@ -15,7 +15,7 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState(qr.status);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  console.log("QR Details Component Rendered with QR:", qr);
   useEffect(() => {
     setStatus(qr.status);
   }, [qr.status]);
@@ -74,7 +74,7 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
         <title>Print QR</title>
       </head>
       <body style="text-align: center;margin: 50px;">
-        <img src="${qrUrl}" alt="QR Code" style="max-width: 100%; height: auto;" />
+        <img src="data:image/png;base64,${qrUrl}" alt="QR Code" style="max-width: 100%; height: auto;" />
         <script>
           window.onload = function() {
             window.print();
@@ -96,7 +96,7 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
         <div className="flex items-center gap-3">
           <input type="checkbox" />
           <img
-            src="QR_code_for_mobile_English_Wikipedia.svg"
+            src={`data:image/png;base64,${qr.qrImageUrl}`}
             alt="QR code"
             className="w-18 h-18"
           />

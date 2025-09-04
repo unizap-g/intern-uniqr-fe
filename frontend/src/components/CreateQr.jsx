@@ -4,6 +4,7 @@ import MobileWireframe from "./MyQr/DeviceWireframe";
 import ContentInput from "./MyQr/ContentInput";
 import { ImageUp } from "lucide-react";
 import QrCard from "./MyQr/QrCard";
+import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import axios from "axios";
 import { Check } from "lucide-react";
@@ -34,6 +35,7 @@ const CreateQr = () => {
       subtitle: "Downloads a product brochure",
     },
   ]);
+  const navigate = useNavigate();
   const [qrShapes, setQrShapes] = useState([]);
   const [qrLogos, setQrLogos] = useState([]);
   const [selectedShape, setSelectedShape] = useState(1);
@@ -41,9 +43,9 @@ const CreateQr = () => {
   const [customLogo, setCustomLogo] = useState(null);
   const [preview, setPreview] = useState(null);
   const [qrImg, setQrImg] = useState("");
-  const [createdQr,setCreatedQr]=useState(null);
+  const [createdQr, setCreatedQr] = useState(null);
   const [qrCodeName, setQrCodeName] = useState("");
-  const [Url, setUrl] = useState("rahbarsamir.vercel.app");
+  const [Url, setUrl] = useState("");
   const [UrlWarning, setUrlWarning] = useState("");
 
   const [iscompleteModelOpen, setiscompletemodelopen] = useState(false);
@@ -100,7 +102,11 @@ const CreateQr = () => {
   useEffect(() => {
     const generateQr = async () => {
       console.log("Generating QR with URL:", Url);
-      const logoUrl=qrLogos.find(logo=>logo._id===selectedLogo)?.logoUrl || "";
+      const logoUrl =
+        qrLogos.find((logo) => logo._id === selectedLogo)?.logoUrl || "";
+      const shape =
+        qrShapes.find((shape) => shape._id === selectedShape)?.shapeName || "";
+
       // const payload = {
       //   QRType: "URL",
       //   QRState: "static",
@@ -130,19 +136,19 @@ const CreateQr = () => {
         ],
         Configuration: [],
         Appearance: [],
-        Shape: ["circle"],
+        Shape: [shape],
         Logo: logoUrl,
         Status: "active",
         CreatedAt: "",
         UpdatedAt: "",
-        userId: "68b8cbaf608d40ab8a49c36e",
+        userId: localStorage.getItem("userId") || "",
+        // userId: "68b8cbaf608d40ab8a49c36e",
       };
       try {
         const res = await axios.post(`${URL}/qr/createQr`, payload);
         console.log("sam", res.data);
         setCreatedQr(res.data);
         setQrImg(res.data.img);
-
       } catch (error) {
         console.error(error);
       }
@@ -150,7 +156,7 @@ const CreateQr = () => {
     if (step === 3) {
       generateQr();
     }
-  }, [step,selectedLogo]);
+  }, [step, selectedLogo, selectedShape]);
   const uploadLogo = async (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type.startsWith("image/")) {
@@ -173,7 +179,40 @@ const CreateQr = () => {
       alert("Please select a valid image file");
     }
   };
-
+  const handleSaveQr = async () => {
+    const logoUrl =
+      qrLogos.find((logo) => logo._id === selectedLogo)?.logoUrl || "";
+    const shape =
+      qrShapes.find((shape) => shape._id === selectedShape)?.shapeName || "";
+    // setiscompletemodelopen(true);
+    const payload = {
+      QRType: "URL",
+      QRState: "static",
+      QRName: "scan",
+      Charge: "Free",
+      BasicInfo: [
+        {
+          website: `https://${Url}`,
+        },
+      ],
+      Configuration: [],
+      Appearance: [],
+      Shape: [shape],
+      Logo: logoUrl,
+      Status: "active",
+      CreatedAt: "",
+      UpdatedAt: "",
+      img: createdQr?.img || "",
+      name: "scan",
+      userId: localStorage.getItem("userId") || "",
+    };
+    try {
+      const res = await axios.post(`${URL}/qr/saveQr`, payload);
+      setiscompletemodelopen(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const verifyURLAndUpdate = (e) => {
     const urlRegex = /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
     if (urlRegex.test(e.target.value) || e.target.value === "") {
@@ -316,7 +355,11 @@ const CreateQr = () => {
                   {qrShapes.map((shape) => (
                     <div
                       key={shape._id}
-                      onClick={() => setSelectedShape(shape._id)}
+                      onClick={() => {
+                        if (shape.type === "free") {
+                          setSelectedShape(shape._id);
+                        }
+                      }}
                       className="border relative active:scale-98 cursor-pointer shadow shadow-lg border-gray-200 p-3 rounded-2xl mb-2"
                     >
                       {selectedShape === shape._id && (
@@ -540,7 +583,7 @@ const CreateQr = () => {
                     setStep((prev) => prev + 1);
                   }
                   if (step === 3) {
-                    setiscompletemodelopen(true);
+                    handleSaveQr();
                   }
                 }}
                 className={`${

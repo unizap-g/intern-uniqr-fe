@@ -46,6 +46,8 @@ const OtpComp = ({ contextPhoneNumber }) => {
         console.log(res.data);
         console.log("uuid store from otpComp");
         localStorage.setItem("uuidApiKey",res.data.uuidApiKey);
+        localStorage.setItem("userId",res.data.userId);
+
         setOtp("");
       } else {
 		setIsLoading(false);

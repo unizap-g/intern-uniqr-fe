@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-
+import '../App.css'
 import axios from "axios";
 import useOverLayers from "../hooks/UseOverlayers";
 const Navbar = () => {
