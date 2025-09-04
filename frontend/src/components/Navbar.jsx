@@ -1,17 +1,14 @@
-import React, { useState, useRef, useEffect, use } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-import { useIsLogin } from "../hooks/useIsLogin";
-import "../components/comp.css";
-import { useNavbar } from "../hooks/useNavbar";
+
+import axios from "axios";
+import useOverLayers from "../hooks/UseOverlayers";
 const Navbar = () => {
-  const {userDetails}=useIsLogin()
-  console.log(userDetails)
+  const URL=import.meta.env.VITE_API_URL;
+  const [userDetails, setUserDetails] = useState([]);
+  const { setIsProfileOpen, setIsSignOutOpen } = useOverLayers();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { showSignoutModal, setShowSignoutModal, showProfileModal, setShowProfileModal } = useNavbar();
-//   const [profileOpen, setProfileOpen] = useState(false);
-
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -23,27 +20,34 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-//   const handleSignOut = () => {
-//     setModalOpen(true);
-//     setIsOpen(false);
-//   };
-
-//   const confirmSignOut = () => {
-//     setModalOpen(false);
-//     // Add your real sign out logic here
-//     alert("Signed Out!");
-//   };
+  useEffect(()=>{
+    const fetchData = async () => {
+  try {
+    const response = await axios.get(`${URL}/user/profile`,{
+      headers:{
+        "x-api-key": localStorage.getItem("uuidApiKey") || ""
+      }
+    });
+    setUserDetails(response.data.user);
+    console.log("Data:", response.data.user);
+  } catch (err) {
+    console.error("Error:", err.response?.data || err.message);
+  }
+};
+  fetchData();
+  }, []);
 
   const handleProfile = () => {
-    setShowProfileModal(true);
+    setIsProfileOpen(true);
     setIsOpen(false);
   };
 
   return (
-    <div className="px-8 flex items-center sticky top-0 blurBg z-10 h-20 mt-0 bg-white/30 justify-between mb-3 ">
+    <div className="px-8 flex items-center sticky  top-0 blurBg z-10 h-20 mt-0 bg-white/30 justify-between mb-3 ">
       <div className="font-bold text-2xl">
-        {showProfileModal ? "Manage Account" : "Dashboard"}
+        {/* {showProfileModal ? "Manage Account" : "Dashboard"}
+         */}
+         dashboard
       </div>
 
       <div ref={dropdownRef} className="relative">
@@ -58,7 +62,7 @@ const Navbar = () => {
           />
 
           <div className="text-left">
-            <p className="text-sm font-semibold">{userDetails?.fullName || "New User"}</p>
+            <p className="text-sm font-semibold">{userDetails?.firstName || "New User"}</p>
             <p className="text-xs text-gray-500">{userDetails?.mobileNumber || ""}</p>
           </div>
 
@@ -95,8 +99,9 @@ const Navbar = () => {
             <li
               className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
               onClick={()=>{
-                setShowSignoutModal(true);
-                setShowProfileModal(false);
+                setIsSignOutOpen(true)
+                // setShowSignoutModal(true);
+                // setShowProfileModal(false);
                 setIsOpen(false);
               }}
             >

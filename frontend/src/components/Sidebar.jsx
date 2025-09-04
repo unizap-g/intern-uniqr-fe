@@ -5,7 +5,7 @@ import Options from './Options';
 import { LayoutDashboard, QrCode, MessageCircleQuestionMark, BookImage, UsersRound, Settings, Wallet, Headset } from 'lucide-react';
 const optionsData = [
   { text: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { text: "Generate QR", icon: QrCode, path: "/generate-qr" },
+  { text: "Qr Details", icon: QrCode, path: "/dashboard/qrdetails" },
   { text: "Help", icon: MessageCircleQuestionMark, path: "/help" },
   { text: "About", icon: BookImage, path: "/about" },
   { text: "Users", icon: UsersRound, path: "/users" },
@@ -15,12 +15,12 @@ const optionsData = [
 ];
 const Sidebar = () => {
   return (
-    <div className=' shadow shadow-2xl hidden md:flex sticky top-0 flex-col p-5 h-screen w-1/5 '>
+    <div className=' shadow shadow-2xl hidden bg-white md:flex sticky top-0 flex-col p-5 h-screen w-1/5 '>
       <div className='text-white font-bold mb-20'>
         <AuthHeader firstText="Intern" secondText="Scan" className="ml-2" />
       </div>
       {optionsData.map((option, index) => (
-        <NavLink key={index} to={option.path} className="block ">
+        <NavLink key={index} end={option.path === "/dashboard"} to={option.path} className="block ">
           {({ isActive }) => (
             <Options
               text={option.text}

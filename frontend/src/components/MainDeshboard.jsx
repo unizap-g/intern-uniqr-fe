@@ -69,8 +69,8 @@ const MainDashboard = () => {
   //   });
   // }, [selectedTime]);
   return (
-    <div className="bg-blue-50 w-full md:w-4/5">
-      <Navbar />
+    <div className="bg-blue-50 mt-0 w-full">
+      {/* <Navbar /> */}
       <div className="p-8">
         <div className="flex justify-between items-center w-full">
           <QrSelect />

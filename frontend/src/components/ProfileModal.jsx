@@ -84,7 +84,7 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
   return (
     <>
       {/* Background Blur */}
-      <div className="absolute inset-0 w-full h-[95vh] bg-white/30 backdrop-blur-sm"></div>
+      <div className="fixed inset-0 w-full h-full bg-white/30 backdrop-blur-sm"></div>
 
       <div
         className={`fixed inset-0 flex items-center justify-center z-50 transition-all duration-300 ${

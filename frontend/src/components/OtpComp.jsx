@@ -6,9 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import OtpBox from "./OtpBox";
 import InputErrorMsg from "./InputErrorMsg";
 import { useNavigate } from "react-router-dom";
-import { useIsLogin } from "../hooks/useIsLogin";
 const OtpComp = ({ contextPhoneNumber }) => {
-  const { setIsJustLogin, setUserId } = useIsLogin();
   const [iserror, setisError] = useState(false);
   const navigate = useNavigate();
   const [errormsg, setErrormsg] = useState("");
@@ -49,8 +47,6 @@ const OtpComp = ({ contextPhoneNumber }) => {
         console.log("uuid store from otpComp");
         localStorage.setItem("uuidApiKey",res.data.uuidApiKey);
         setOtp("");
-        setIsJustLogin(true);
-        setUserId(res.data.userId);
       } else {
 		setIsLoading(false);
 		setErrormsg("Invalid OTP");

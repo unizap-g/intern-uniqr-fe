@@ -11,7 +11,7 @@
 //       try {
 //         const res=await axios.get(`${URL}/user/userdata`,{
 //           headers: {
-//             "x-api-key": localStorage.getItem("uuidApiKey"),
+//             "key": localStorage.getItem("uuidApiKey"),
 //           },
 //         });
 //       const newTokenKey=res.headers["x-api-key"];
