@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import axios from "axios";
 import { Check } from "lucide-react";
-import "../app.css";
+
 import { Gem } from "lucide-react";
 const CreateQr = () => {
   const URL = import.meta.env.VITE_API_URL;
