@@ -306,7 +306,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const URL = import.meta.env.VITE_API_URL;
-
 const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 	// Validation Schema with Yup (only required editable fields)
 	const validationSchema = Yup.object({
@@ -342,7 +341,7 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 		initialValues: {
 			fullName: "",
 			email: "",
-			phone: "",
+			phone: "9064",
 			dateOfBirth: "",
 			gender: "",
 			password: "", // not editable

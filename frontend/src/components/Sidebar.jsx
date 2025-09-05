@@ -58,7 +58,7 @@ import {
   Wallet,
   Headset,
 } from "lucide-react";
-import  useOverlayers  from "../hooks/useOverlayers";
+import useOverlayers from "../hooks/UseOverlayers.jsx";
 const optionsData = [
   { text: "Dashboard", icon: LayoutDashboard, path: "/dashboard",isActive:true },
   { text: "My QR Codes", icon: QrCode, path: "/dashboard/qrdetails",isActive:true },
