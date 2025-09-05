@@ -12,12 +12,12 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useOverLayers from "../../hooks/useOverLayers";
+import useOverlayers from "../../hooks/useOverlayers";
 
 const QrDetails = ({ qr, onDuplicate, onDelete }) => {
   const navigate = useNavigate();
 
-  const {setEditedData} = useOverLayers();
+  const {setEditedData} = useOverlayers();
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState(qr.status);
   const [dropdownOpen, setDropdownOpen] = useState(false);

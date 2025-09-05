@@ -58,7 +58,7 @@ import {
   Wallet,
   Headset,
 } from "lucide-react";
-import  useOverLayers  from "../hooks/useOverLayers";
+import  useOverlayers  from "../hooks/useOverlayers";
 const optionsData = [
   { text: "Dashboard", icon: LayoutDashboard, path: "/dashboard",isActive:true },
   { text: "My QR Codes", icon: QrCode, path: "/dashboard/qrdetails",isActive:true },
@@ -71,7 +71,7 @@ const optionsData = [
 ]
 
 const Sidebar = ({ isMobile = false }) => {
-  const { setNavbarName } = useOverLayers();
+  const { setNavbarName } = useOverlayers();
 
   return (
     <div

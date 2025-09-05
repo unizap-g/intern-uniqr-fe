@@ -8,7 +8,7 @@ import { useNavigate,useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import axios from "axios";
 import { Check } from "lucide-react";
-import useOverLayers from "../hooks/UseOverlayers";
+import useOverlayers from "../hooks/UseOverlayers";
 import { Gem } from "lucide-react";
 const EditQr = () => {
   const URL = import.meta.env.VITE_API_URL;
@@ -26,7 +26,7 @@ const EditQr = () => {
   const [qrCodeName, setQrCodeName] = useState("");
   const [Url, setUrl] = useState("");
   const [UrlWarning, setUrlWarning] = useState("");
-  const {editedData, setEditedData} = useOverLayers();
+  const {editedData, setEditedData} = useOverlayers();
   const [iscompleteModelOpen, setiscompletemodelopen] = useState(false);
   console.log("edited data in edit qr:", editedData);
 

@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import '../App.css'
 import axios from "axios";
-import useOverLayers from "../hooks/UseOverlayers";
+import useOverlayers from "../hooks/UseOverlayers";
 const Navbar = ({title}) => {
   const URL=import.meta.env.VITE_API_URL;
   const [userDetails, setUserDetails] = useState([]);
-  const { setIsProfileOpen, setIsSignOutOpen } = useOverLayers();
+  const { setIsProfileOpen, setIsSignOutOpen } = useOverlayers();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   useEffect(() => {

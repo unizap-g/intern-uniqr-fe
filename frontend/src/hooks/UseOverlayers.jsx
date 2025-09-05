@@ -2,8 +2,8 @@ import OverLayersContext from "../context/OverLayers";
 
 import { useContext } from "react";
 
-const useOverLayers = () => {
+const useOverlayers = () => {
   return useContext(OverLayersContext);
 };
 
-export default useOverLayers;
+export default useOverlayers;
