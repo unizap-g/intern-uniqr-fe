@@ -44,7 +44,7 @@ const CreateQr = () => {
   const [preview, setPreview] = useState(null);
   const [qrImg, setQrImg] = useState("");
   const [createdQr, setCreatedQr] = useState(null);
-  const [qrCodeName, setQrCodeName] = useState("");
+  const [qrCodeName, setQrCodeName] = useState("MY QR CODE");
   const [qrCodeWarning, setQrCodeWarning] = useState("");
 
   const [Url, setUrl] = useState("");
@@ -165,7 +165,7 @@ const CreateQr = () => {
       const payload = {
         QRType: "URL",
         QRState: "static",
-        QRName: "scan",
+        QRName: qrCodeName || "My QR Code",
         Charge: "Free",
         BasicInfo: [
           {
@@ -240,7 +240,7 @@ const CreateQr = () => {
     const payload = {
       QRType: "URL",
       QRState: "static",
-      QRName: "scan",
+      QRName: qrCodeName || "My QR Code",
       Charge: "Free",
       BasicInfo: [
         {

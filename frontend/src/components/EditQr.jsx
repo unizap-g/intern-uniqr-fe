@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import CompleteComp from "./MyQr/CompleteComp";
 import MobileWireframe from "./MyQr/DeviceWireframe";
 import ContentInput from "./MyQr/ContentInput";
@@ -17,7 +17,7 @@ const EditQr = () => {
   const navigate = useNavigate();
   const [qrShapes, setQrShapes] = useState([]);
   const [qrLogos, setQrLogos] = useState([]);
-  const [selectedShape, setSelectedShape] = useState(1);
+  const [selectedShape, setSelectedShape] = useState(null);
   const [selectedLogo, setSelectedLogo] = useState(null);
   const [customLogo, setCustomLogo] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -28,14 +28,24 @@ const EditQr = () => {
   const [UrlWarning, setUrlWarning] = useState("");
   const {editedData, setEditedData} = useOverLayers();
   const [iscompleteModelOpen, setiscompletemodelopen] = useState(false);
-  console.log(editedData)
-  useEffect(() => {
+  console.log("edited data in edit qr:", editedData);
 
+
+
+  
+  
+
+
+
+
+
+
+  useEffect(() => {
     const fetchShape = async () => {
       try {
         const res = await axios.get(`${URL}/qr/getshape`);
-        console.log(res.data);
         setSelectedShape(res.data[0]._id);
+        console.log("shapes:", res.data);
         setQrShapes(res.data);
       } catch (error) {
         console.log(error);
@@ -96,18 +106,30 @@ const EditQr = () => {
         userId: localStorage.getItem("userId") || "",
       };
       try {
-        const res = await axios.post(`${URL}/qr/createQr`, payload);
+        const res = await axios.post(`${URL}/qr/createQr`, payload,{
+          headers: {
+            "x-api-key": localStorage.getItem("uuidApiKey") || ""
+          }
+
+        });
+
         console.log("sam", res.data);
         setCreatedQr(res.data);
         setQrImg(res.data.img);
       } catch (error) {
         console.error(error);
+        if(error.status===401 || error.status===400){
+          localStorage.removeItem("uuidApiKey");
+          window.location.href="/";
+        }
       }
     };
     if (step === 3) {
       generateQr();
     }
   }, [step, selectedLogo, selectedShape]);
+
+
   const uploadLogo = async (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type.startsWith("image/")) {
@@ -173,6 +195,19 @@ const EditQr = () => {
     }
     setUrl(e.target.value);
   };
+
+
+
+    useEffect(() => {
+    if (editedData && qrShapes.length > 0 && qrLogos.length > 0) {
+      setQrCodeName(editedData.qrName || "");
+      setUrl(editedData.basicInfo[0]?.website?.replace("https://", "") || "");
+      console.log("hey sam",editedData.shape.name)
+      const shapeId=qrShapes.find(shape => shape.shapeName === (editedData.shape.name || ""))?._id;
+      setSelectedShape(shapeId);
+      console.log("shapeId:", shapeId);
+    }
+  }, [editedData, qrShapes,qrLogos]); 
   return (
     <div className="h-full flex flex-col justify-between bg-blue-50 w-full">
       <CompleteComp
@@ -501,7 +536,7 @@ const EditQr = () => {
                     : "bg-green-500 border-green-500"
                 } cursor-pointer active:scale-98 text-white font-bold w-40 py-2 border-2 rounded-md`}
               >
-                {step < 3 ? "Next" : "Complete"}
+                {step < 3 ? "Next" : "Save"}
               </button>
             </div>
           </div>

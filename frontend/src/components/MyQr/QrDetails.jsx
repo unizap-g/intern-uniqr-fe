@@ -33,8 +33,8 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
   });
 
   const handleCopy = () => {
-    if (!qr?.link) return;
-    navigator.clipboard.writeText(qr.link);
+    if (!qr?.basicInfo[0].website) return;
+    navigator.clipboard.writeText(qr.basicInfo[0].website);
     setCopied(true);
     setTimeout(() => setCopied(false), 1200);
   };
@@ -125,10 +125,10 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
       {/* Link */}
       <td className="px-2 py-3 text-black font-semibold text-xs truncate">
         <div className="flex items-center gap-3 relative">
-          {qr?.link
-            ? qr.link.length > 20
-              ? `${qr.link.slice(0, 20)}...`
-              : qr.link
+          {qr?.basicInfo[0].website
+          ? qr.basicInfo[0].website.length > 20
+              ? `${qr.basicInfo[0].website.slice(0, 20)}...`
+              : qr.basicInfo[0].website
             : ""}
           <Copy
             className="w-4 h-4 text-blue-700 hover:text-blue-600 cursor-pointer"
@@ -143,7 +143,7 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
       </td>
 
       {/* Scan */}
-      <td className="px-2 py-3 w-16 text-xs">{qr.scan}</td>
+      <td className="px-2 py-3 w-16 text-xs">{qr.scan || 10}</td>
 
       {/* Status */}
       <td className="px-2 py-3 w-16">
