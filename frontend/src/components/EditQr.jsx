@@ -4,37 +4,18 @@ import MobileWireframe from "./MyQr/DeviceWireframe";
 import ContentInput from "./MyQr/ContentInput";
 import { ImageUp } from "lucide-react";
 import QrCard from "./MyQr/QrCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import axios from "axios";
 import { Check } from "lucide-react";
 
 import { Gem } from "lucide-react";
-const CreateQr = () => {
-  const BASEURL = import.meta.env.VITE_API_URL;
-  const [step, setStep] = useState(1);
-  const [qrTypes, setQrTypes] = useState([
-    {
-      qrType: "static",
-      qrName: "URL",
-      subtitle: "Opens a specific webpage",
-    },
-    {
-      qrType: "dynamic",
-      qrName: "vCard",
-      subtitle: "Saves contact information",
-    },
-    {
-      qrType: "static",
-      qrName: "WiFi",
-      subtitle: "Connects to WiFi network",
-    },
-    {
-      qrType: "dynamic",
-      qrName: "PDF",
-      subtitle: "Downloads a product brochure",
-    },
-  ]);
+const EditQr = () => {
+  const URL = import.meta.env.VITE_API_URL;
+  const [step, setStep] = useState(2);
+  const location = useLocation();
+  const { editData } = location.state || {};
+console.log("Edit Data:", editData);
   const navigate = useNavigate();
   const [qrShapes, setQrShapes] = useState([]);
   const [qrLogos, setQrLogos] = useState([]);
@@ -50,23 +31,10 @@ const CreateQr = () => {
 
   const [iscompleteModelOpen, setiscompletemodelopen] = useState(false);
   useEffect(() => {
-    const FetchData = async () => {
-      try {
-        const res = await axios.get(
-          "http://10.1.3.91:1031/mock/5/api/qrtyles?env=dev"
-        );
-        setQrTypes(res.data.qrCodes);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+
     const fetchShape = async () => {
       try {
-        const res = await axios.get(`${BASEURL}/qr/getshape`,{
-          headers: {
-            "x-api-key": localStorage.getItem("uuidApiKey") || ""
-          }
-        });
+        const res = await axios.get(`${URL}/qr/getshape`);
         console.log(res.data);
         setSelectedShape(res.data[0]._id);
         setQrShapes(res.data);
@@ -86,7 +54,7 @@ const CreateQr = () => {
     };
     const fetchLogo = async () => {
       try {
-        const res = await axios.get(`${BASEURL}/qr/getlogo`);
+        const res = await axios.get(`${URL}/qr/getlogo`);
         // console.log(res.data)
         setQrLogos(res.data);
       } catch (error) {
@@ -94,7 +62,6 @@ const CreateQr = () => {
       }
     };
 
-    FetchData();
     fetchShape();
     // fetchQr();
     fetchLogo();
@@ -103,41 +70,9 @@ const CreateQr = () => {
     setStep(step + 1);
     console.log(step);
   };
-
-
-
-//   function formatUrl(url) {
-//   // Trim spaces
-//   url = url.trim();
-
-//   // If missing protocol, add https://
-//   if (!/^https?:\/\//i.test(url)) {
-//     url = "https://" + url;
-//   }
-
-//   // Now create a URL object to normalize
-//   const urlObj = new URL(url);
-
-//   // Ensure "www." exists at start of hostname
-//   if (!urlObj.hostname.startsWith("www.")) {
-//     urlObj.hostname = "www." + urlObj.hostname;
-//   }
-
-//   return urlObj.href;
-// }
-
-
-
-
-
-
-
-
-
   useEffect(() => {
-    // const formattedUrl = formatUrl(Url);
     const generateQr = async () => {
-      // console.log("Generating QR with URL:", formattedUrl);
+      console.log("Generating QR with URL:", Url);
       const logoUrl =
         qrLogos.find((logo) => logo._id === selectedLogo)?.logoUrl || "";
       const shape =
@@ -181,16 +116,7 @@ const CreateQr = () => {
         // userId: "68b8cbaf608d40ab8a49c36e",
       };
       try {
-        const res = await axios.post(`${BASEURL}/qr/createQr`, payload,{
-          headers: {
-            "x-api-key": localStorage.getItem("uuidApiKey") || ""
-          }
-
-        });
-        if(res.status===401){
-          localStorage.removeItem("uuidApiKey");
-          window.location.href="/";
-        }
+        const res = await axios.post(`${URL}/qr/createQr`, payload);
         console.log("sam", res.data);
         setCreatedQr(res.data);
         setQrImg(res.data.img);
@@ -224,14 +150,7 @@ const CreateQr = () => {
       alert("Please select a valid image file");
     }
   };
-
   const handleSaveQr = async () => {
-    if (!Url) {
-      setUrlWarning("Please enter a valid URL");
-      return;
-    }
-    // const formattedUrl = formatUrl(Url);
-    // console.log("Formatted URL:", formattedUrl);
     const logoUrl =
       qrLogos.find((logo) => logo._id === selectedLogo)?.logoUrl || "";
     const shape =
@@ -259,14 +178,14 @@ const CreateQr = () => {
       userId: localStorage.getItem("userId") || "",
     };
     try {
-      const res = await axios.post(`${BASEURL}/qr/saveQr`, payload);
+      const res = await axios.post(`${URL}/qr/saveQr`, payload);
       setiscompletemodelopen(true);
     } catch (error) {
       console.error(error);
     }
   };
   const verifyURLAndUpdate = (e) => {
-    const urlRegex = /^(https:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\/?#].*)?$/;
+    const urlRegex = /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
     if (urlRegex.test(e.target.value) || e.target.value === "") {
       setUrlWarning("");
     } else {
@@ -295,50 +214,8 @@ const CreateQr = () => {
         </h1>
       </div>
       {/* topComponent     */}
-      <div className="w-full h-[90%] flex">
+      <div className="w-full h-[80%] flex">
         {/* QR details */}
-        {step == 1 && (
-          <div className="h-full no-scrollbar p-4 w-[65%] overflow-y-scroll">
-            {/* static */}
-            <div className="mb-4">
-              {qrTypes.length > 0 && (
-                <div>
-                  <h1 className="font-medium text-md mb-4">Static QR</h1>
-                </div>
-              )}
-              <div className="  grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {qrTypes
-                  .filter((qr) => qr.qrType === "static")
-                  .map((qr) => (
-                    <QrCard
-                      onclick={changeStep}
-                      key={qr.id}
-                      title={qr.qrName}
-                      subtitle={qr.subtitle}
-                    />
-                  ))}
-              </div>
-            </div>
-            <div className="mb-4">
-              {qrTypes.length > 0 && (
-                <div>
-                  <h1 className="font-medium text-md mb-4">Dynamic QR</h1>
-                </div>
-              )}
-              <div className="  grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {qrTypes
-                  .filter((qr) => qr.qrType === "dynamic")
-                  .map((qr) => (
-                    <QrCard
-                      key={qr.id}
-                      title={qr.qrName}
-                      subtitle={qr.subtitle}
-                    />
-                  ))}
-              </div>
-            </div>
-          </div>
-        )}
         {step == 2 && (
           <div className=" h-full w-[65%] overflow-y-scroll no-scrollbar px-4">
             {/* input fields */}
@@ -527,7 +404,7 @@ const CreateQr = () => {
       {/* topComponent     */}
 
       {/* bottom Comp */}
-      <div className=" px-15  flex justify-between items-center w-full h-[10%]">
+      <div className=" px-15 flex justify-between items-center w-full h-[10%]">
         <div className="flex gap-3 justify-center items-center">
           <div className="flex gap-2 justify-center items-center">
             <div
@@ -617,7 +494,7 @@ const CreateQr = () => {
           <div className=" flex justify-between items-center gap-5">
             <div>
               <button
-                onClick={() => setStep((prev) => prev - 1)}
+                onClick={() => {if(step>2)setStep((prev) => prev - 1)}}
                 className="border-2 active:scale-98 cursor-pointer border-blue-900  text-blue-900 font-bold w-40  py-2 rounded-md"
               >
                 back
@@ -656,4 +533,4 @@ const CreateQr = () => {
   );
 };
 
-export default CreateQr;
+export default EditQr;

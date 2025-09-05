@@ -8,14 +8,18 @@ import {
   Printer,
   Trash,
   EyeOff,
-  Eye,              
+  Eye,
 } from "lucide-react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const QrDetails = ({ qr, onDuplicate, onDelete }) => {
+  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState(qr.status);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  console.log("QR Details Component Rendered with QR:", qr);
+  // console.log("QR Details Component Rendered with QR:", qr);
   useEffect(() => {
     setStatus(qr.status);
   }, [qr.status]);
@@ -52,11 +56,14 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
     setStatus(newStatus);
     setDropdownOpen(false);
     try {
-      const res = await fetch(`http://10.1.3.91:1031/mock/5/api/qrcode/${qr.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const res = await fetch(
+        `http://10.1.3.91:1031/mock/5/api/qrcode/${qr.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
     } catch (err) {
       setStatus(prev);
@@ -67,7 +74,7 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
   const handlePrint = () => {
     const qrUrl = qr.qrImageUrl || "QR_code_for_mobile_English_Wikipedia.svg";
 
-    const printWindow = window.open('', '_blank', "width=500,height=500");
+    const printWindow = window.open("", "_blank", "width=500,height=500");
     printWindow.document.write(`
       <html>
       <head>
@@ -87,8 +94,11 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
       </html>
     `);
     printWindow.document.close();
-  }
+  };
 
+  const editQr = () => {
+    navigate('/dashboard/qrdetails/editQr', { state: { editData: "qr" } });
+  };
   return (
     <tr className="border-b border-gray-300 text-sm relative">
       {/* Details */}
@@ -111,7 +121,11 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
       {/* Link */}
       <td className="px-2 py-3 text-black font-semibold text-xs truncate">
         <div className="flex items-center gap-3 relative">
-          {qr?.link ? (qr.link.length > 20 ? `${qr.link.slice(0, 20)}...` : qr.link) : ""}
+          {qr?.link
+            ? qr.link.length > 20
+              ? `${qr.link.slice(0, 20)}...`
+              : qr.link
+            : ""}
           <Copy
             className="w-4 h-4 text-blue-700 hover:text-blue-600 cursor-pointer"
             onClick={handleCopy}
@@ -164,17 +178,26 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
 
           {dropdownOpen && (
             <div className="absolute right-10 left-40 top-18 z-10 bg-white border border-gray-200 rounded-xl shadow-2xl flex flex-col min-w-[140px] py-3">
-              <button className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer">
+              <button
+                onClick={editQr}
+                className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer"
+              >
                 <Pencil className="w-4 h-4 inline-block mr-3 text-gray-500" />
                 Edit
               </button>
-              
-              <button className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer" onClick={()=>onDuplicate(qr)}>
+
+              <button
+                className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer"
+                onClick={() => onDuplicate(qr)}
+              >
                 <Copy className="w-4 h-4 inline-block mr-3 text-gray-500" />
                 Duplicate
               </button>
-              
-              <button className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer" onClick={handlePrint}>
+
+              <button
+                className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer"
+                onClick={handlePrint}
+              >
                 <Printer className="w-4 h-4 inline-block mr-3 text-gray-500" />
                 Print
               </button>
@@ -196,7 +219,10 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
                 )}
               </button>
 
-              <button className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer" onClick={() => onDelete(qr.id)}>
+              <button
+                className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer"
+                onClick={() => onDelete(qr.id)}
+              >
                 <Trash className="w-4 h-4 inline-block mr-3 text-gray-500" />
                 Delete
               </button>

@@ -28,6 +28,10 @@ const Navbar = () => {
         "x-api-key": localStorage.getItem("uuidApiKey") || ""
       }
     });
+    if(response.status===401){
+      localStorage.removeItem("uuidApiKey");
+      window.location.href="/";
+    }
     setUserDetails(response.data.user);
     console.log("Data:", response.data.user);
   } catch (err) {

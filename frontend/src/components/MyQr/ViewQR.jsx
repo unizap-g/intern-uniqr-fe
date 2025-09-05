@@ -68,7 +68,12 @@ const ViewQR = () => {
   useEffect(() => {
     const fetchQrData = async () => {
       try {
-        const res = await axios.get(`${URL}/qr/qr-list/${localStorage.getItem("userId") || ""}`);
+        const res = await axios.get(`${URL}/qr/qr-list/${localStorage.getItem("userId") || ""}`,{
+          headers: {
+            "x-api-key": localStorage.getItem("uuidApiKey") || ""
+          }
+          
+        });
         console.log("QR Data Response:", res.data);
         if (res.data && res.data.qrList) {
           setQrData(res.data.qrList || []);
@@ -83,7 +88,7 @@ const ViewQR = () => {
   }, []);
 
   return (
-    <div className="flex flex-col px-8 py-2 w-full h-full">
+    <div className="flex flex-col px-8 py-2 w-full h-[80vh]">
         {/* search */}
       <div className="flex w-full justify-between items-center mt-2 mb-4">
             <div className="relative w-80">

@@ -12,6 +12,7 @@ import ViewQR from "./components/MyQr/ViewQR.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import MainDashboard from "./components/MainDeshboard.jsx";
 import MyQrOutlet from "./pages/MyQrOutlet.jsx";
+import EditQr from "./components/EditQr.jsx";
 
 const App = () => {
   // const [userDetails, setUserDetails] = useState(null);
@@ -33,15 +34,16 @@ const App = () => {
       <Route
         path="/dashboard"
         element={
-          // <ProtectedRoute>
+          //<ProtectedRoute>
             <MainOutlet />
-          // </ProtectedRoute>
+         //</ProtectedRoute>
         }
       >
         <Route index element={<MainDashboard />} />
         <Route path="qrdetails" element={<MyQrOutlet />}>
           <Route index element={<ViewQR />} />
           <Route path="createqr" element={<CreateQr />} />
+          <Route path="editqr" element={<EditQr />} />
         </Route>
       </Route>
       <Route
