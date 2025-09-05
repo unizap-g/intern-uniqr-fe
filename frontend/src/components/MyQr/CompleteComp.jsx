@@ -60,7 +60,6 @@ const handleDownload = (base64Data,fileName='qr-code.png') => {
     navigator.clipboard.writeText(qrUrl).then(() => {
       setShareMsg(`✅ URL ${qrUrl} copied to clipboard!`);
       setTimeout(() => {setShareMsg("")
-        navigate("/dashboard/qrdetails");
       }, 3000); // remove after 3 sec
     });
   };

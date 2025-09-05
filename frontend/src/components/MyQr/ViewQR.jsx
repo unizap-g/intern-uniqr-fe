@@ -27,10 +27,16 @@ const ViewQR = () => {
   );
 
   const handleDelete = async (qrId) => {
+    console.log("Deleting QR with ID:", qrId);  
     try{
-      const res = await axios.delete(`http://10.1.3.91:1031/mock/5/api/qrcode/${qrId}`);
+      const res = await axios.delete(`${URL}/qr/qrcode/${qrId}`,{
+        headers: {
+          "x-api-key": localStorage.getItem("uuidApiKey") || ""
+        }
+      });
+      console.log(res.data)
       if(res.status === 200 || res.status === 204){
-        setQrData((prev) => prev.filter((qr) => qr.id !== qrId));
+        setQrData((prev) => prev.filter((qr) => qr._id !== qrId));
       }
     }catch(err){
       console.error("Error deleting QR code:", err);
@@ -50,10 +56,10 @@ const ViewQR = () => {
         ...qr,
         qrName: `Copy of ${qr.qrName}`,
       };
-      const res = await axios.post("http:////10.1.3.91:1031/mock/5/api/qrcode", newQrData, {
+      const res = await axios.post(`${URL}/qr/qrcode/${qr._id}/duplicate`, newQrData, {
         headers: {
-          "Content-Type": "application/json",
-        },
+          "x-api-key": localStorage.getItem("uuidApiKey") || ""
+        }
       });
       if(res.data){
         setQrData((prev) => [...prev, res.data]);
@@ -149,7 +155,7 @@ const ViewQR = () => {
                   </thead>
                   <tbody>
                     {paginatedData.map((qr) => (
-                      <QrDetails key={qr.id} qr={qr} onDuplicate={handleDuplicate}
+                      <QrDetails key={qr._id} qr={qr} onDuplicate={handleDuplicate}
                       onDelete = {(id) => setDeleteId(id)} />
                     ))}
                   </tbody>

@@ -12,10 +12,12 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import useOverLayers from "../../hooks/useOverLayers";
 
 const QrDetails = ({ qr, onDuplicate, onDelete }) => {
   const navigate = useNavigate();
+
+  const {setEditedData} = useOverLayers();
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState(qr.status);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -97,7 +99,9 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
   };
 
   const editQr = () => {
-    navigate('/dashboard/qrdetails/editQr', { state: { editData: "qr" } });
+    navigate('/dashboard/qrdetails/editQr');
+    setEditedData(qr);
+    setDropdownOpen(false);
   };
   return (
     <tr className="border-b border-gray-300 text-sm relative">
@@ -221,7 +225,7 @@ const QrDetails = ({ qr, onDuplicate, onDelete }) => {
 
               <button
                 className="px-6 py-2 text-left hover:bg-gray-100 cursor-pointer"
-                onClick={() => onDelete(qr.id)}
+                onClick={() => onDelete(qr._id)}
               >
                 <Trash className="w-4 h-4 inline-block mr-3 text-gray-500" />
                 Delete

@@ -45,6 +45,8 @@ const CreateQr = () => {
   const [qrImg, setQrImg] = useState("");
   const [createdQr, setCreatedQr] = useState(null);
   const [qrCodeName, setQrCodeName] = useState("");
+  const [qrCodeWarning, setQrCodeWarning] = useState("");
+
   const [Url, setUrl] = useState("");
   const [UrlWarning, setUrlWarning] = useState("");
 
@@ -230,13 +232,11 @@ const CreateQr = () => {
       setUrlWarning("Please enter a valid URL");
       return;
     }
-    // const formattedUrl = formatUrl(Url);
-    // console.log("Formatted URL:", formattedUrl);
     const logoUrl =
       qrLogos.find((logo) => logo._id === selectedLogo)?.logoUrl || "";
     const shape =
       qrShapes.find((shape) => shape._id === selectedShape)?.shapeName || "";
-    // setiscompletemodelopen(true);
+    
     const payload = {
       QRType: "URL",
       QRState: "static",
@@ -256,17 +256,28 @@ const CreateQr = () => {
       UpdatedAt: "",
       img: createdQr?.img || "",
       name: "scan",
-      userId: localStorage.getItem("userId") || "",
+      // userId: localStorage.getItem("userId") || "",
     };
     try {
-      const res = await axios.post(`${BASEURL}/qr/saveQr`, payload);
-      setiscompletemodelopen(true);
+      const res = await axios.post(`${BASEURL}/qr/saveQr`, payload,{
+        headers: {
+          "x-api-key": localStorage.getItem("uuidApiKey") || ""
+        }
+      });
+      if(res.status===201){
+        
+        setiscompletemodelopen(true);
+      }
+      if(res.status===401){
+        localStorage.removeItem("uuidApiKey");
+        window.location.href="/";
+      }
     } catch (error) {
       console.error(error);
     }
   };
   const verifyURLAndUpdate = (e) => {
-    const urlRegex = /^(https:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\/?#].*)?$/;
+    const urlRegex = /^(https:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.(com|net|org|in|co\.in|com\.in|net\.in|org\.in))([\/?#].*)?$/;
     if (urlRegex.test(e.target.value) || e.target.value === "") {
       setUrlWarning("");
     } else {
@@ -286,7 +297,7 @@ const CreateQr = () => {
         onPay={() => {}}
       />
       <div className=" px-4 h-[5%]">
-        <h1 className="font-extrabold text-[20px] mb-4">
+        <h1 className="font-bold text-gray-600 text-[20px] mb-4">
           {step === 1
             ? "Choose QR code Type"
             : step === 2
@@ -295,7 +306,7 @@ const CreateQr = () => {
         </h1>
       </div>
       {/* topComponent     */}
-      <div className="w-full h-[90%] flex">
+      <div className="w-full h-[85%] flex">
         {/* QR details */}
         {step == 1 && (
           <div className="h-full no-scrollbar p-4 w-[65%] overflow-y-scroll">
@@ -347,7 +358,7 @@ const CreateQr = () => {
             <div>
               <div className="shadow shadow-lg mb-5 bg-white p-5 rounded-lg">
                 <div className="mb-5">
-                  <h1 className="font-bold text-lg mb-2">QR code name</h1>
+                  <h1 className="font-bold text-lg mb-2">QR Code Name</h1>
                 </div>
                 <div>
                   <input
@@ -356,15 +367,23 @@ const CreateQr = () => {
                     value={qrCodeName}
                     className="border border-gray-300 outline-none rounded-md p-3 text-lg w-full"
                     placeholder="Enter QR code name"
-                    onChange={(e) => setQrCodeName(e.target.value)}
+                    onChange={(e) => {
+                      setQrCodeName(e.target.value);
+                      setQrCodeWarning(""); 
+                    }}
                   />
+                  {qrCodeWarning && (
+                    <p className="text-red-500 text-sm px-2 mt-1">
+                      {qrCodeWarning}
+                    </p>
+                  )}
                 </div>
               </div>
 
               {/* basic info */}
               <div className="shadow shadow-lg mb-5 bg-white p-5 rounded-lg">
                 <div className="mb-5">
-                  <h1 className="font-bold text-lg mb-2">basic information</h1>
+                  <h1 className="font-bold text-lg mb-2">Basic Information</h1>
                 </div>
                 <div>
                   <h1 className="mb-2 font-medium text-gray-500 text-sm">
@@ -620,7 +639,7 @@ const CreateQr = () => {
                 onClick={() => setStep((prev) => prev - 1)}
                 className="border-2 active:scale-98 cursor-pointer border-blue-900  text-blue-900 font-bold w-40  py-2 rounded-md"
               >
-                back
+                Back
               </button>
             </div>
             <div>
@@ -628,7 +647,10 @@ const CreateQr = () => {
                 onClick={() => {
                   if (Url === "") {
                     setUrlWarning("Please enter a URL");
-                    return;
+                  }
+                  if(qrCodeName===""){
+                    setQrCodeWarning("Please enter QR code name");
+                    return
                   }
 
                   if (step < 3 && UrlWarning === "") {

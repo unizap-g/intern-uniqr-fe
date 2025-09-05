@@ -8,14 +8,12 @@ import { useNavigate,useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import axios from "axios";
 import { Check } from "lucide-react";
-
+import useOverLayers from "../hooks/UseOverlayers";
 import { Gem } from "lucide-react";
 const EditQr = () => {
   const URL = import.meta.env.VITE_API_URL;
   const [step, setStep] = useState(2);
-  const location = useLocation();
-  const { editData } = location.state || {};
-console.log("Edit Data:", editData);
+
   const navigate = useNavigate();
   const [qrShapes, setQrShapes] = useState([]);
   const [qrLogos, setQrLogos] = useState([]);
@@ -28,8 +26,9 @@ console.log("Edit Data:", editData);
   const [qrCodeName, setQrCodeName] = useState("");
   const [Url, setUrl] = useState("");
   const [UrlWarning, setUrlWarning] = useState("");
-
+  const {editedData, setEditedData} = useOverLayers();
   const [iscompleteModelOpen, setiscompletemodelopen] = useState(false);
+  console.log(editedData)
   useEffect(() => {
 
     const fetchShape = async () => {
@@ -77,24 +76,6 @@ console.log("Edit Data:", editData);
         qrLogos.find((logo) => logo._id === selectedLogo)?.logoUrl || "";
       const shape =
         qrShapes.find((shape) => shape._id === selectedShape)?.shapeName || "";
-
-      // const payload = {
-      //   QRType: "URL",
-      //   QRState: "static",
-      //   QRName: qrCodeName || "My QR Code",
-      //   Charge: "Free",
-      //   BasicInfo: [
-      //     {
-      //       website: Url,
-      //     },
-      //   ],
-      //   Configuration: [],
-      //   Appearance: [],
-      //   Shape: ["hexagon"],
-      //   Logo: "",
-      //   Status: "active",
-      // };
-
       const payload = {
         QRType: "URL",
         QRState: "static",
@@ -113,7 +94,6 @@ console.log("Edit Data:", editData);
         CreatedAt: "",
         UpdatedAt: "",
         userId: localStorage.getItem("userId") || "",
-        // userId: "68b8cbaf608d40ab8a49c36e",
       };
       try {
         const res = await axios.post(`${URL}/qr/createQr`, payload);

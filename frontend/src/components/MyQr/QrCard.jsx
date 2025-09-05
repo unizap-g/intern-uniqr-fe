@@ -4,7 +4,7 @@ import { Globe } from 'lucide-react';
 const QrCard = ({title,subtitle,onclick}) => {
   return (
     <div
-    onClick={onclick}
+    onClick={()=>title==="URL" ? onclick() : null}
      className=' cursor-pointer active:scale-98 bg-white gap-3 flex justify-start h-20 flex-1/2 items-center p-4 rounded-lg shadow'>
         <div className='bg-gray-200 p-2 rounded-lg'>
             <Globe color='blue'/>

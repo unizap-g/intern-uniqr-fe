@@ -3,7 +3,7 @@ import { ChevronDown } from "lucide-react";
 import '../App.css'
 import axios from "axios";
 import useOverLayers from "../hooks/UseOverlayers";
-const Navbar = () => {
+const Navbar = ({title}) => {
   const URL=import.meta.env.VITE_API_URL;
   const [userDetails, setUserDetails] = useState([]);
   const { setIsProfileOpen, setIsSignOutOpen } = useOverLayers();
@@ -28,14 +28,15 @@ const Navbar = () => {
         "x-api-key": localStorage.getItem("uuidApiKey") || ""
       }
     });
-    if(response.status===401){
-      localStorage.removeItem("uuidApiKey");
-      window.location.href="/";
-    }
+  
     setUserDetails(response.data.user);
     console.log("Data:", response.data.user);
   } catch (err) {
     console.error("Error:", err.response?.data || err.message);
+      if(err.status===400 || err.status===401){
+      localStorage.removeItem("uuidApiKey");
+      window.location.href="/";
+    }
   }
 };
   fetchData();
@@ -49,9 +50,8 @@ const Navbar = () => {
   return (
     <div className="px-8 flex items-center sticky  top-0 blurBg z-10 h-20 mt-0 bg-white/30 justify-between mb-3 ">
       <div className="font-bold text-2xl">
-        {/* {showProfileModal ? "Manage Account" : "Dashboard"}
-         */}
-         dashboard
+
+         {title}
       </div>
 
       <div ref={dropdownRef} className="relative">
