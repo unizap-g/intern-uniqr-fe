@@ -8,7 +8,7 @@ import { useNavigate,useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import axios from "axios";
 import { Check } from "lucide-react";
-import useOverlayers from "../hooks/UseOverlayers";
+import useOverlayers from "../hooks/UseOverlayers.jsx";
 import { Gem } from "lucide-react";
 const EditQr = () => {
   const URL = import.meta.env.VITE_API_URL;
@@ -127,7 +127,7 @@ const EditQr = () => {
     if (step === 3) {
       generateQr();
     }
-  }, [step, selectedLogo, selectedShape]);
+  }, [ selectedLogo, selectedShape]);
 
 
   const uploadLogo = async (e) => {
@@ -180,8 +180,13 @@ const EditQr = () => {
       userId: localStorage.getItem("userId") || "",
     };
     try {
-      const res = await axios.post(`${URL}/qr/saveQr`, payload);
+      const res = await axios.patch(`${URL}/qr/qrcode/${editedData._id}`, payload,{
+        headers:{
+          "x-api-key": localStorage.getItem("uuidApiKey") || ""
+        }
+      });
       setiscompletemodelopen(true);
+      console.log("QR saved:", res.data);
     } catch (error) {
       console.error(error);
     }
@@ -199,7 +204,8 @@ const EditQr = () => {
 
 
     useEffect(() => {
-    if (editedData && qrShapes.length > 0 && qrLogos.length > 0) {
+    if (editedData && qrShapes?.length > 0 && qrLogos?.length > 0) {
+      setQrImg(editedData.qrImageUrl || "QR_code_for_mobile_English_Wikipedia.svg");
       setQrCodeName(editedData.qrName || "");
       setUrl(editedData.basicInfo[0]?.website?.replace("https://", "") || "");
       console.log("hey sam",editedData.shape.name)

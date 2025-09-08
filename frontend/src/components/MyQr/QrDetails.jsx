@@ -10,9 +10,8 @@ import {
   EyeOff,
   Eye,
 } from "lucide-react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useOverlayers from "../../hooks/useOverlayers";
+import useOverlayers from "../../hooks/useOverlayers.jsx";
 
 const QrDetails = ({ qr, onDuplicate, onDelete }) => {
   const navigate = useNavigate();

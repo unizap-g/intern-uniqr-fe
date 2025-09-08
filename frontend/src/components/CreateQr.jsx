@@ -70,7 +70,7 @@ const CreateQr = () => {
           }
         });
         console.log(res.data);
-        setSelectedShape(res.data[0]._id);
+        setSelectedShape(res.data[0]?._id);
         setQrShapes(res.data);
       } catch (error) {
         console.log(error);
@@ -645,12 +645,18 @@ const CreateQr = () => {
             <div>
               <button
                 onClick={() => {
-                  if (Url === "") {
+                  if (Url === "" && qrCodeName==="") {
                     setUrlWarning("Please enter a URL");
+                    setQrCodeWarning("Please enter QR code name");
+                    return
                   }
                   if(qrCodeName===""){
                     setQrCodeWarning("Please enter QR code name");
                     return
+                  }
+                  if (Url === "") {
+                    setUrlWarning("Please enter a URL");
+                    return;
                   }
 
                   if (step < 3 && UrlWarning === "") {

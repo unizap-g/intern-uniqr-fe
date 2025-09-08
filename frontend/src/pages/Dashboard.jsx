@@ -9,7 +9,6 @@ import axios from "axios";
 import { useIsLogin } from "../hooks/useIsLogin";
 const Dashboard = () => {
   const {userDetails, setUserDetails } = useIsLogin();
-  console.log("khfohfiuyfi",userDetails?._id)
   const navigate = useNavigate();
   const URL = import.meta.env.VITE_API_URL;
   const [showSignoutModal, setShowSignoutModal] = React.useState(false);

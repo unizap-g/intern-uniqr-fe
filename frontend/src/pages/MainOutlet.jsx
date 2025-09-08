@@ -13,10 +13,10 @@ const MainOutlet = () => {
   const navigate=useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSignOutOpen, setIsSignOutOpen] = useState(false);
-  const [navbarName,setNavbarName]=useState("");
+  const [navbarName,setNavbarName]=useState("Dashboard");
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [editedData,setEditedData]=useState(null);
-  const [userDetails,setUserDetails]=useState(null);
+  const [userD,setUserD]=useState(null);
 
 const handleSignOut = async () => {
   try {
@@ -42,7 +42,7 @@ const handleSignOut = async () => {
 
 
   return (
-    <OverLayersContext.Provider value={{ isProfileOpen, setIsProfileOpen, isSignOutOpen, setIsSignOutOpen, isDownloadOpen, setIsDownloadOpen ,editedData,setEditedData, navbarName,setNavbarName,userDetails,setUserDetails}}>
+<OverLayersContext.Provider value={{ isProfileOpen, setIsProfileOpen, isSignOutOpen, setIsSignOutOpen, isDownloadOpen, setIsDownloadOpen ,editedData,setEditedData, navbarName,setNavbarName,userD,setUserD}}>
       <div className='min-h-screen w-full flex bg-blue-50 '>
           <Sidebar />
           <div className='flex-1'>

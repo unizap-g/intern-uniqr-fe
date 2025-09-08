@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import '../App.css'
 import axios from "axios";
-import useOverlayers from "../hooks/UseOverlayers";
+import useOverlayers from "../hooks/UseOverlayers.jsx";
 const Navbar = ({title}) => {
   const URL=import.meta.env.VITE_API_URL;
   const [userDetails, setUserDetails] = useState([]);
-  const { setIsProfileOpen, setIsSignOutOpen } = useOverlayers();
+  const { setIsProfileOpen, setIsSignOutOpen,setUserD} = useOverlayers();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   useEffect(() => {
@@ -30,6 +30,7 @@ const Navbar = ({title}) => {
     });
   
     setUserDetails(response.data.user);
+    setUserD(response.data.user)
     console.log("Data:", response.data.user);
   } catch (err) {
     console.error("Error:", err.response?.data || err.message);

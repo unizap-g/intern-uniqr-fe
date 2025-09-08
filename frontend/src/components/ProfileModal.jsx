@@ -304,15 +304,36 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import useOverlayers from "../hooks/UseOverlayers.jsx";
 const URL = import.meta.env.VITE_API_URL;
 const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
+	const {userD} = useOverlayers()
+	useEffect(()=>{
+		if(userD) {
+				console.log("userD:", userD)
+				formik.setValues({
+					firstName: userD.firstName || "",
+					lastName: userD.lastName || "",
+					email: userD.email || "",
+					phone: userD.mobileNumber || "",
+					dateOfBirth: userD.dateOfBirth || "",
+					gender: userD.gender || "",
+				password: "", // not editable
+				confirmPassword: "", // not editable
+			});
+		}
+	},[userD])
+	
 	// Validation Schema with Yup (only required editable fields)
 	const validationSchema = Yup.object({
-		fullName: Yup.string()
-			.max(25, "Full Name must be less than 25 characters")
-			.required("Full Name is required")
-			.matches(/^[A-Za-z\s]+$/, "Full Name must only contain letters"),
+		firstName: Yup.string()
+			.max(25, "First Name must be less than 25 characters")
+			.required("First Name is required")
+			.matches(/^[A-Za-z\s]+$/, "First Name must only contain letters"),
+		lastName: Yup.string()
+			.max(25, "Last Name must be less than 25 characters")
+			.required("Last Name is required")
+			.matches(/^[A-Za-z\s]+$/, "Last Name must only contain letters"),
 		email: Yup.string().email("Invalid email").required("Email is required"),
 		// dateOfBirth: Yup.date().required("Date of Birth is required"),
 		dateOfBirth: Yup.string()
@@ -339,9 +360,10 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 	// Formik setup
 	const formik = useFormik({
 		initialValues: {
-			fullName: "",
+			firstName: "",
+			lastName:"",
 			email: "",
-			phone: "9064",
+			phone:"",
 			dateOfBirth: "",
 			gender: "",
 			password: "", // not editable
@@ -402,7 +424,7 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 		onSubmit: async (values) => {
 			console.log("Submitting data:", values);
 			try {
-				if (!user?._id) {
+				if (!userD?._id) {
 					alert("User not found, please try again");
 					return;
 				}
@@ -415,7 +437,8 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 				};
 
 				const updatedData = {
-					fullName: values.fullName,
+					firstName: values.firstName,
+					lastName: values.lastName,
 					email: values.email,
 					dateOfBirth: formatDate(values.dateOfBirth),
 					gender: values.gender,
@@ -430,17 +453,12 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 					return;
 				}
 
-				console.log("PATCH Body:", updatedData);
-				console.log("PATCH Headers:", {
-					"x-api-key": uuidApiKey,
-					"Content-Type": "application/json",
-				});
+		
 
 				// send request
 				const res = await axios.patch(`${URL}/user/profile`, updatedData, {
 					headers: {
-						"x-api-key": uuidApiKey,
-						"Content-Type": "application/json",
+						"x-api-key": uuidApiKey
 					},
 				});
 
@@ -448,32 +466,29 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 				setUser(res.data.user);
 
 				// update apiKey if backend sends a fresh one
-				if (res.data.uuidApiKey) {
-					localStorage.setItem("uuidApiKey", res.data.uuidApiKey);
-				}
 
 				onClose();
 			} catch (err) {
-				console.error("Error updating profile", err);
-				alert(err.response?.data?.message || "Failed to update profile");
+				onClose();
+				
 			}
 		},
 	});
 
-	// Prefill form values when modal opens
-	useEffect(() => {
-		if (isOpen && user) {
-			formik.setValues({
-				fullName: user.fullName || "",
-				phone: user.phone || "",
-				email: user.email || "",
-				dateOfBirth: user.dateOfBirth || "",
-				gender: user.gender || "",
-				password: "",
-				confirmPassword: "",
-			});
-		}
-	}, [isOpen, user]);
+	// // Prefill form values when modal opens
+	// useEffect(() => {
+	// 	if (isOpen && user) {
+	// 		formik.setValues({
+	// 			fullName: user.fullName || "",
+	// 			phone: user.phone || "",
+	// 			email: user.email || "",
+	// 			dateOfBirth: user.dateOfBirth || "",
+	// 			gender: user.gender || "",
+	// 			password: "",
+	// 			confirmPassword: "",
+	// 		});
+	// 	}
+	// }, [isOpen, user]);
 
 	if (!isOpen) return null;
 
@@ -518,21 +533,37 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 					onSubmit={formik.handleSubmit}
 					className="space-y-4 overflow-y-auto max-h-[80vh] sm:max-h-none"
 				>
-					{/* Full Name */}
+					{/* First Name */}
 					<div>
-						<label className="block text-gray-700 mb-1">Full Name</label>
+						<label className="block text-gray-700 mb-1">First Name</label>
 						<input
 							type="text"
-							name="fullName"
+							name="firstName"
 							maxLength={25}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
-							value={formik.values.fullName}
+							value={formik.values.firstName}
 							placeholder="Enter your name"
 							className="w-full border text-gray-500 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
 						/>
-						{formik.touched.fullName && formik.errors.fullName && (
-							<p className="text-red-500 text-sm">{formik.errors.fullName}</p>
+						{formik.touched.firstName && formik.errors.firstName && (
+							<p className="text-red-500 text-sm">{formik.errors.firstName}</p>
+						)}
+					</div>
+					<div>
+						<label className="block text-gray-700 mb-1">Last Name</label>
+						<input
+							type="text"
+							name="lastName"
+							maxLength={25}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+							value={formik.values.lastName}
+							placeholder="Enter your name"
+							className="w-full border text-gray-500 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+						/>
+						{formik.touched.lastName && formik.errors.lastName && (
+							<p className="text-red-500 text-sm">{formik.errors.lastName}</p>
 						)}
 					</div>
 
@@ -624,7 +655,7 @@ const ProfileModal = ({ isOpen, onClose, user, setUser }) => {
 					<div>
 						<span className="text-gray-700">Gender</span>
 						<div className="flex items-center space-x-4 mt-1">
-							{["male", "female", "others"].map((g) => (
+							{["Male", "Female", "Others"].map((g) => (
 								<label
 									key={g}
 									className={
