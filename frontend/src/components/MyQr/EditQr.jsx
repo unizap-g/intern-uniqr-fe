@@ -1,76 +1,49 @@
 import React, { useState, useEffect } from "react";
-import CompleteComp from "./MyQr/CompleteComp";
-import MobileWireframe from "./MyQr/DeviceWireframe";
-import ContentInput from "./MyQr/ContentInput";
+import CompleteComp from "../MyQr/CompleteComp";
+import MobileWireframe from "../MyQr/DeviceWireframe";
 import { ImageUp } from "lucide-react";
-import QrCard from "./MyQr/QrCard";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import axios from "axios";
 import { Check } from "lucide-react";
-
+import useOverlayers from "../../hooks/UseOverlayers.jsx";
 import { Gem } from "lucide-react";
-const CreateQr = () => {
-  const BASEURL = import.meta.env.VITE_API_URL;
-  const [step, setStep] = useState(1);
-  const [qrTypes, setQrTypes] = useState([
-    {
-      qrType: "static",
-      qrName: "URL",
-      subtitle: "Opens a specific webpage",
-    },
-    {
-      qrType: "dynamic",
-      qrName: "vCard",
-      subtitle: "Saves contact information",
-    },
-    {
-      qrType: "static",
-      qrName: "WiFi",
-      subtitle: "Connects to WiFi network",
-    },
-    {
-      qrType: "dynamic",
-      qrName: "PDF",
-      subtitle: "Downloads a product brochure",
-    },
-  ]);
+const EditQr = () => {
+  const URL = import.meta.env.VITE_API_URL;
+  const [step, setStep] = useState(2);
+
   const navigate = useNavigate();
   const [qrShapes, setQrShapes] = useState([]);
   const [qrLogos, setQrLogos] = useState([]);
-  const [selectedShape, setSelectedShape] = useState(1);
+  const [selectedShape, setSelectedShape] = useState(null);
   const [selectedLogo, setSelectedLogo] = useState(null);
   const [customLogo, setCustomLogo] = useState(null);
   const [preview, setPreview] = useState(null);
   const [qrImg, setQrImg] = useState("");
   const [createdQr, setCreatedQr] = useState(null);
-  const [qrCodeName, setQrCodeName] = useState("MY QR CODE");
-  const [qrCodeWarning, setQrCodeWarning] = useState("");
-
+  const [qrCodeName, setQrCodeName] = useState("");
   const [Url, setUrl] = useState("");
   const [UrlWarning, setUrlWarning] = useState("");
-
+  const {editedData, setEditedData} = useOverlayers();
   const [iscompleteModelOpen, setiscompletemodelopen] = useState(false);
+  console.log("edited data in edit qr:", editedData);
+
+
+
+  
+  
+
+
+
+
+
+
   useEffect(() => {
-    const FetchData = async () => {
-      try {
-        const res = await axios.get(
-          "http://10.1.3.91:1031/mock/5/api/qrtyles?env=dev"
-        );
-        setQrTypes(res.data.qrCodes);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     const fetchShape = async () => {
       try {
-        const res = await axios.get(`${BASEURL}/qr/getshape`,{
-          headers: {
-            "x-api-key": localStorage.getItem("uuidApiKey") || ""
-          }
-        });
-        console.log(res.data);
-        setSelectedShape(res.data[0]?._id);
+        const res = await axios.get(`${URL}/qr/getshape`);
+        setSelectedShape(res.data[0]._id);
+        console.log("shapes:", res.data);
         setQrShapes(res.data);
       } catch (error) {
         console.log(error);
@@ -88,7 +61,7 @@ const CreateQr = () => {
     };
     const fetchLogo = async () => {
       try {
-        const res = await axios.get(`${BASEURL}/qr/getlogo`);
+        const res = await axios.get(`${URL}/qr/getlogo`);
         // console.log(res.data)
         setQrLogos(res.data);
       } catch (error) {
@@ -96,7 +69,6 @@ const CreateQr = () => {
       }
     };
 
-    FetchData();
     fetchShape();
     // fetchQr();
     fetchLogo();
@@ -105,67 +77,17 @@ const CreateQr = () => {
     setStep(step + 1);
     console.log(step);
   };
-
-
-
-//   function formatUrl(url) {
-//   // Trim spaces
-//   url = url.trim();
-
-//   // If missing protocol, add https://
-//   if (!/^https?:\/\//i.test(url)) {
-//     url = "https://" + url;
-//   }
-
-//   // Now create a URL object to normalize
-//   const urlObj = new URL(url);
-
-//   // Ensure "www." exists at start of hostname
-//   if (!urlObj.hostname.startsWith("www.")) {
-//     urlObj.hostname = "www." + urlObj.hostname;
-//   }
-
-//   return urlObj.href;
-// }
-
-
-
-
-
-
-
-
-
   useEffect(() => {
-    // const formattedUrl = formatUrl(Url);
     const generateQr = async () => {
-      // console.log("Generating QR with URL:", formattedUrl);
+      console.log("Generating QR with URL:", Url);
       const logoUrl =
         qrLogos.find((logo) => logo._id === selectedLogo)?.logoUrl || "";
       const shape =
         qrShapes.find((shape) => shape._id === selectedShape)?.shapeName || "";
-
-      // const payload = {
-      //   QRType: "URL",
-      //   QRState: "static",
-      //   QRName: qrCodeName || "My QR Code",
-      //   Charge: "Free",
-      //   BasicInfo: [
-      //     {
-      //       website: Url,
-      //     },
-      //   ],
-      //   Configuration: [],
-      //   Appearance: [],
-      //   Shape: ["hexagon"],
-      //   Logo: "",
-      //   Status: "active",
-      // };
-
       const payload = {
         QRType: "URL",
         QRState: "static",
-        QRName: qrCodeName || "My QR Code",
+        QRName: "scan",
         Charge: "Free",
         BasicInfo: [
           {
@@ -180,30 +102,32 @@ const CreateQr = () => {
         CreatedAt: "",
         UpdatedAt: "",
         userId: localStorage.getItem("userId") || "",
-        // userId: "68b8cbaf608d40ab8a49c36e",
       };
       try {
-        const res = await axios.post(`${BASEURL}/qr/createQr`, payload,{
+        const res = await axios.post(`${URL}/qr/createQr`, payload,{
           headers: {
             "x-api-key": localStorage.getItem("uuidApiKey") || ""
           }
 
         });
-        if(res.status===401){
-          localStorage.removeItem("uuidApiKey");
-          window.location.href="/";
-        }
+
         console.log("sam", res.data);
         setCreatedQr(res.data);
         setQrImg(res.data.img);
       } catch (error) {
         console.error(error);
+        if(error.status===401 || error.status===400){
+          localStorage.removeItem("uuidApiKey");
+          window.location.href="/";
+        }
       }
     };
     if (step === 3) {
       generateQr();
     }
-  }, [step, selectedLogo, selectedShape]);
+  }, [ selectedLogo, selectedShape]);
+
+
   const uploadLogo = async (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type.startsWith("image/")) {
@@ -226,21 +150,16 @@ const CreateQr = () => {
       alert("Please select a valid image file");
     }
   };
-
   const handleSaveQr = async () => {
-    if (!Url) {
-      setUrlWarning("Please enter a valid URL");
-      return;
-    }
     const logoUrl =
       qrLogos.find((logo) => logo._id === selectedLogo)?.logoUrl || "";
     const shape =
       qrShapes.find((shape) => shape._id === selectedShape)?.shapeName || "";
-    
+    // setiscompletemodelopen(true);
     const payload = {
       QRType: "URL",
       QRState: "static",
-      QRName: qrCodeName || "My QR Code",
+      QRName: "scan",
       Charge: "Free",
       BasicInfo: [
         {
@@ -256,28 +175,22 @@ const CreateQr = () => {
       UpdatedAt: "",
       img: createdQr?.img || "",
       name: "scan",
-      // userId: localStorage.getItem("userId") || "",
+      userId: localStorage.getItem("userId") || "",
     };
     try {
-      const res = await axios.post(`${BASEURL}/qr/saveQr`, payload,{
-        headers: {
+      const res = await axios.patch(`${URL}/qr/qrcode/${editedData._id}`, payload,{
+        headers:{
           "x-api-key": localStorage.getItem("uuidApiKey") || ""
         }
       });
-      if(res.status===201){
-        
-        setiscompletemodelopen(true);
-      }
-      if(res.status===401){
-        localStorage.removeItem("uuidApiKey");
-        window.location.href="/";
-      }
+      setiscompletemodelopen(true);
+      console.log("QR saved:", res.data);
     } catch (error) {
       console.error(error);
     }
   };
   const verifyURLAndUpdate = (e) => {
-    const urlRegex = /^(https:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.(com|net|org|in|co\.in|com\.in|net\.in|org\.in))([\/?#].*)?$/;
+    const urlRegex = /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
     if (urlRegex.test(e.target.value) || e.target.value === "") {
       setUrlWarning("");
     } else {
@@ -285,6 +198,20 @@ const CreateQr = () => {
     }
     setUrl(e.target.value);
   };
+
+
+
+    useEffect(() => {
+    if (editedData && qrShapes?.length > 0 && qrLogos?.length > 0) {
+      setQrImg(editedData.qrImageUrl || "QR_code_for_mobile_English_Wikipedia.svg");
+      setQrCodeName(editedData.qrName || "");
+      setUrl(editedData.basicInfo[0]?.website?.replace("https://", "") || "");
+      console.log("hey sam",editedData.shape.name)
+      const shapeId=qrShapes.find(shape => shape.shapeName === (editedData.shape.name || ""))?._id;
+      setSelectedShape(shapeId);
+      console.log("shapeId:", shapeId);
+    }
+  }, [editedData, qrShapes,qrLogos]); 
   return (
     <div className="h-full flex flex-col justify-between bg-blue-50 w-full">
       <CompleteComp
@@ -297,7 +224,7 @@ const CreateQr = () => {
         onPay={() => {}}
       />
       <div className=" px-4 h-[5%]">
-        <h1 className="font-bold text-gray-600 text-[20px] mb-4">
+        <h1 className="font-extrabold text-[20px] mb-4">
           {step === 1
             ? "Choose QR code Type"
             : step === 2
@@ -306,50 +233,8 @@ const CreateQr = () => {
         </h1>
       </div>
       {/* topComponent     */}
-      <div className="w-full h-[85%] flex">
+      <div className="w-full h-[80%] flex">
         {/* QR details */}
-        {step == 1 && (
-          <div className="h-full no-scrollbar p-4 w-[65%] overflow-y-scroll">
-            {/* static */}
-            <div className="mb-4">
-              {qrTypes.length > 0 && (
-                <div>
-                  <h1 className="font-medium text-md mb-4">Static QR</h1>
-                </div>
-              )}
-              <div className="  grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {qrTypes
-                  .filter((qr) => qr.qrType === "static")
-                  .map((qr) => (
-                    <QrCard
-                      onclick={changeStep}
-                      key={qr.id}
-                      title={qr.qrName}
-                      subtitle={qr.subtitle}
-                    />
-                  ))}
-              </div>
-            </div>
-            <div className="mb-4">
-              {qrTypes.length > 0 && (
-                <div>
-                  <h1 className="font-medium text-md mb-4">Dynamic QR</h1>
-                </div>
-              )}
-              <div className="  grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {qrTypes
-                  .filter((qr) => qr.qrType === "dynamic")
-                  .map((qr) => (
-                    <QrCard
-                      key={qr.id}
-                      title={qr.qrName}
-                      subtitle={qr.subtitle}
-                    />
-                  ))}
-              </div>
-            </div>
-          </div>
-        )}
         {step == 2 && (
           <div className=" h-full w-[65%] overflow-y-scroll no-scrollbar px-4">
             {/* input fields */}
@@ -358,7 +243,7 @@ const CreateQr = () => {
             <div>
               <div className="shadow shadow-lg mb-5 bg-white p-5 rounded-lg">
                 <div className="mb-5">
-                  <h1 className="font-bold text-lg mb-2">QR Code Name</h1>
+                  <h1 className="font-bold text-lg mb-2">QR code name</h1>
                 </div>
                 <div>
                   <input
@@ -367,23 +252,15 @@ const CreateQr = () => {
                     value={qrCodeName}
                     className="border border-gray-300 outline-none rounded-md p-3 text-lg w-full"
                     placeholder="Enter QR code name"
-                    onChange={(e) => {
-                      setQrCodeName(e.target.value);
-                      setQrCodeWarning(""); 
-                    }}
+                    onChange={(e) => setQrCodeName(e.target.value)}
                   />
-                  {qrCodeWarning && (
-                    <p className="text-red-500 text-sm px-2 mt-1">
-                      {qrCodeWarning}
-                    </p>
-                  )}
                 </div>
               </div>
 
               {/* basic info */}
               <div className="shadow shadow-lg mb-5 bg-white p-5 rounded-lg">
                 <div className="mb-5">
-                  <h1 className="font-bold text-lg mb-2">Basic Information</h1>
+                  <h1 className="font-bold text-lg mb-2">basic information</h1>
                 </div>
                 <div>
                   <h1 className="mb-2 font-medium text-gray-500 text-sm">
@@ -546,7 +423,7 @@ const CreateQr = () => {
       {/* topComponent     */}
 
       {/* bottom Comp */}
-      <div className=" px-15  flex justify-between items-center w-full h-[10%]">
+      <div className=" px-15 flex justify-between items-center w-full h-[10%]">
         <div className="flex gap-3 justify-center items-center">
           <div className="flex gap-2 justify-center items-center">
             <div
@@ -636,24 +513,15 @@ const CreateQr = () => {
           <div className=" flex justify-between items-center gap-5">
             <div>
               <button
-                onClick={() => setStep((prev) => prev - 1)}
+                onClick={() => {if(step>2)setStep((prev) => prev - 1)}}
                 className="border-2 active:scale-98 cursor-pointer border-blue-900  text-blue-900 font-bold w-40  py-2 rounded-md"
               >
-                Back
+                back
               </button>
             </div>
             <div>
               <button
                 onClick={() => {
-                  if (Url === "" && qrCodeName==="") {
-                    setUrlWarning("Please enter a URL");
-                    setQrCodeWarning("Please enter QR code name");
-                    return
-                  }
-                  if(qrCodeName===""){
-                    setQrCodeWarning("Please enter QR code name");
-                    return
-                  }
                   if (Url === "") {
                     setUrlWarning("Please enter a URL");
                     return;
@@ -672,7 +540,7 @@ const CreateQr = () => {
                     : "bg-green-500 border-green-500"
                 } cursor-pointer active:scale-98 text-white font-bold w-40 py-2 border-2 rounded-md`}
               >
-                {step < 3 ? "Next" : "Complete"}
+                {step < 3 ? "Next" : "Save"}
               </button>
             </div>
           </div>
@@ -684,4 +552,4 @@ const CreateQr = () => {
   );
 };
 
-export default CreateQr;
+export default EditQr;

@@ -1,13 +1,10 @@
 import React from 'react'
-import CreateQr from '../components/CreateQr';
-import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
-import ViewQR from '../components/MyQr/ViewQR';
+import CreateQr from '../components/MyQr/CreateQr.jsx';
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
 
 const Myqr = () => {
   return (
     <div className="min-h-screen w-full flex bg-blue-50 ">
-        {/* it will remove */}
         <Sidebar />
         {/* <MainContent /> */}
         <div className='w-4/5 bg-blue-100 h-screen flex flex-col'>

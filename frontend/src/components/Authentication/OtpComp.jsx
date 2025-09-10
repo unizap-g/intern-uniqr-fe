@@ -1,68 +1,93 @@
-import AuthHeader from "./AuthHeader";
+import AuthHeader from "../../components/Sidebar/AuthHeader";
 import React, { useState } from "react";
 import { ArrowBigLeft } from "lucide-react";
 import axios from "axios";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import OtpBox from "./OtpBox";
 import InputErrorMsg from "./InputErrorMsg";
 import { useNavigate } from "react-router-dom";
-const OtpComp = ({ contextPhoneNumber }) => {
+const OtpComp = ({ contextPhoneNumber, contextEmail }) => {
   const [iserror, setisError] = useState(false);
   const navigate = useNavigate();
   const [errormsg, setErrormsg] = useState("");
   const URL = import.meta.env.VITE_API_URL;
   const { setActiveComp, prevComp, setIsLoading } = useAuth();
   const [otp, setOtp] = useState("");
-
   const onotpChange = (value) => {
-
     if (/^\d{0,6}$/.test(value)) {
       setOtp(value);
       setisError(false);
     }
   };
   const handleSubmit = async (e) => {
-	e.preventDefault();
+  e.preventDefault();
     if(otp.length!==6){
-		setErrormsg("please enter otp")
-		setisError(true)
-		return;
-	}
-	
-	setIsLoading(true);
+    setErrormsg("please enter otp")
+    setisError(true)
+    return;
+  }
+  setIsLoading(true);
     e.preventDefault();
     try {
-      const res = await axios.post(`${URL}/auth/verify-otp`, {
-        countryCode: "91",
-        mobileNumber: contextPhoneNumber,
-        otp: otp,
-      });
-      console.log(res.data);
-      if (res.status === 201) {
-        setIsLoading(false);
-        navigate("/dashboard");
-        // OTP verification successful
-        console.log("OTP verification successful");
-        console.log(res.data);
-        console.log("uuid store from otpComp");
-        localStorage.setItem("uuidApiKey",res.data.uuidApiKey);
-        localStorage.setItem("userId",res.data.userId);
-
-        setOtp("");
+      let payload = {};
+      if(prevComp === "login") {
+        payload = {
+          mode : "mobile",
+          countryCode : "91",
+          mobileNumber : contextPhoneNumber,
+          otp : otp
+        }
       } else {
-		setIsLoading(false);
-		setErrormsg("Invalid OTP");
-		setisError(true);
-        console.error("OTP verification failed");
+        payload = {
+          mode : "email",
+          email : contextEmail, //need to pass from login comp
+          otp : otp
+        }
+      }
+      const res = await axios.post(`${URL}/auth/verify-otp`, payload);
+      if(res.data === 200 && res.status === "success") {
+        setIsLoading(false);
+        localStorage.setItem("uuidApiKey", res.data.passcode);
+        //
+        navigate("/dashboard");
+      }
+      else {
+        setIsLoading(false);
+        setErrormsg("Invalid OTP");
+        setisError(true);
       }
     } catch (error) {
       setIsLoading(false);
-      console.error("check",error);
       setErrormsg("Invalid OTP");
       setisError(true);
-      // setOtp("");
+      console.error(error);
     }
   };
+  //     console.log(res.data);
+  //     if (res.status === 201) {
+  //       setIsLoading(false);
+  //       navigate("/dashboard");
+  //       // OTP verification successful
+  //       console.log("OTP verification successful");
+  //       console.log(res.data);
+  //       console.log("uuid store from otpComp");
+  //       localStorage.setItem("uuidApiKey",res.data.uuidApiKey);
+  //       localStorage.setItem("userId",res.data.userId);
+  //       setOtp("");
+  //     } else {
+  //  setIsLoading(false);
+  //  setErrormsg("Invalid OTP");
+  //  setisError(true);
+  //       console.error("OTP verification failed");
+  //     }
+  //   } catch (error) {
+  //     setIsLoading(false);
+  //     console.error("check",error);
+  //     setErrormsg("Invalid OTP");
+  //     setisError(true);
+  //     // setOtp("");
+  //   }
+  // };
   return (
     <div className="flex-1 h-screen bg-white  flex justify-center ">
       <div className="flex px-10 md:px-0 flex-col gap-3 w-full md:w-[60%] mt-20 md:mt-40">
@@ -82,23 +107,21 @@ const OtpComp = ({ contextPhoneNumber }) => {
             identity and continue securely
           </p>
         </div>
-
         <form onSubmit={handleSubmit} className="w-full md:w-sm">
          <OtpBox onChangeOTP={onotpChange}/>
           {iserror && (
-			<div className="ml-5">
-				<InputErrorMsg message={errormsg} />
-			</div>
-		  )}
+      <div className="ml-5">
+        <InputErrorMsg message={errormsg} />
+      </div>
+      )}
           <button
             type="submit"
             className="w-full cursor-pointer mt-8 py-3 text-white font-bold rounded-lg bg-[#065AD8]
-			hover:bg-[#065AD8]/80
-			"
+      hover:bg-[#065AD8]/80
+      "
           >
             {prevComp === "signup" ? "Sign Up" : "Continue"}
           </button>
-
           {/* <div className="w-full flex justify-center items-center mt-5 ">
             <p className="text-[14px] font-bold text-gray-600">
               Already have an account?{" "}
@@ -115,5 +138,4 @@ const OtpComp = ({ contextPhoneNumber }) => {
     </div>
   );
 };
-
 export default OtpComp;

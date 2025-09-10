@@ -1,8 +1,6 @@
 import React from 'react'
-import {TabletSmartphone } from 'lucide-react'
-
-import '../App.css'
-
+import {TabletSmartphone } from 'lucide-react';
+// import { getCountryCallingCode } from 'libphonenumber-js';
 // const countryCode = Intl.DateTimeFormat().resolvedOptions().locale.split("-")[1]; 
 
 // const callingCode = getCountryCallingCode(countryCode);

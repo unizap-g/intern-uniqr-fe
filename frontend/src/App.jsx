@@ -1,34 +1,16 @@
 import Auth from "./pages/Auth";
-
-import Dashboard from "./pages/Dashboard";
 import { Route, Routes } from "react-router-dom";
-import IsLoginContext from "./context/isLoginContext.jsx";
-import { VerifyProvider } from "./context/VerifyContext";
-import UnderConstructionPage from "./pages/UndercunstructionPage.jsx";
-import { useState } from "react";
 import MainOutlet from "./pages/MainOutlet.jsx";
-import CreateQr from "./components/CreateQr.jsx";
+import CreateQr from "./components/MyQr/CreateQr.jsx";
 import ViewQR from "./components/MyQr/ViewQR.jsx";
-import ProtectedRoute from "./ProtectedRoute.jsx";
-import MainDashboard from "./components/MainDeshboard.jsx";
+import MainDashboard from "./components/Dashboard/MainDeshboard.jsx";
 import MyQrOutlet from "./pages/MyQrOutlet.jsx";
-import EditQr from "./components/EditQr.jsx";
+import EditQr from "./components/MyQr/EditQr.jsx";
 
 const App = () => {
   // const [userDetails, setUserDetails] = useState(null);
   return (
-    // <VerifyProvider>
-    //   <IsLoginContext value={{ userDetails, setUserDetails }}>
-    //     <Routes>
-    //       <Route path="/login" element={<Auth />} />
-    //       <Route
-    //         path="/dashboard"
-    //         element={<Dashboard />}
-    //       />
-    //       <Route path='*' element={<Dashboard/>} />
-    //     </Routes>
-    //   </IsLoginContext>
-    // </VerifyProvider>
+    
     <Routes>
       <Route path="/" element={<Auth />} />
       <Route

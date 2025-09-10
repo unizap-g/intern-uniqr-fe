@@ -1,11 +1,11 @@
-import React, { use, useEffect, useState } from "react";
-import Banner from "../components/Banner";
-import SignupComp from "../components/SignupComp";
+import React, { useEffect, useState } from "react";
+import Banner from "../components/Authentication/Banner";
+import SignupComp from "../components/Authentication/SignupComp";
 import AuthContext from "../context/AuthContext";
-import Login from "../components/Login";
+import Login from "../components/Authentication/Login";
 import { useNavigate } from "react-router-dom";
-import OtpComp from "../components/OtpComp";
-import Loading from "../components/Loading";
+import OtpComp from "../components/Authentication/OtpComp";
+import Loading from "../components/Authentication/Loading";
 const Auth = () => {
   const navigate=useNavigate();
   const [activeComp, setActiveComp] = useState("login");

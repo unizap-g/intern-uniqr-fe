@@ -1,14 +1,31 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
-import '../App.css'
+import { ChevronDown, Menu, X } from "lucide-react";
+import "../../App.css";
 import axios from "axios";
-import useOverlayers from "../hooks/UseOverlayers.jsx";
+import useOverlayers from "../../hooks/UseOverlayers.jsx";
+import { useIsLogin } from "../../hooks/useIsLogin.js";
+import Sidebar from "../Sidebar/Sidebar.jsx";
+
 const Navbar = ({title}) => {
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const URL=import.meta.env.VITE_API_URL;
-  const [userDetails, setUserDetails] = useState([]);
-  const { setIsProfileOpen, setIsSignOutOpen,setUserD} = useOverlayers();
+  const { userDetails } = useIsLogin();
+  const { setIsProfileOpen, setIsSignOutOpen } = useOverlayers();
   const [isOpen, setIsOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const dropdownRef = useRef(null);
+  // const {setShowProfileModal,setShowSignoutModal, showProfileModal}=useNavbar();
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -20,40 +37,51 @@ const Navbar = ({title}) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  useEffect(()=>{
-    const fetchData = async () => {
-  try {
-    const response = await axios.get(`${URL}/user/profile`,{
-      headers:{
-        "x-api-key": localStorage.getItem("uuidApiKey") || ""
-      }
-    });
-  
-    setUserDetails(response.data.user);
-    setUserD(response.data.user)
-    console.log("Data:", response.data.user);
-  } catch (err) {
-    console.error("Error:", err.response?.data || err.message);
-      if(err.status===400 || err.status===401){
-      localStorage.removeItem("uuidApiKey");
-      window.location.href="/";
-    }
-  }
-};
-  fetchData();
-  }, []);
 
   const handleProfile = () => {
     setIsProfileOpen(true);
     setIsOpen(false);
   };
 
+  // Only open sidebar on small screens
+  const handleHamburgerClick = () => {
+    if (screenWidth < 768) {
+      setSidebarOpen(true);
+    }
+  };
+
   return (
     <div className="px-8 flex items-center sticky  top-0 blurBg z-10 h-20 mt-0 bg-white/30 justify-between mb-3 ">
-      <div className="font-bold text-2xl">
+      <button onClick={handleHamburgerClick} className="md:hidden flex items-center text-black">
+        <Menu size={28} />
+      </button>
 
+      <div className="font-bold text-2xl">
          {title}
       </div>
+
+      {sidebarOpen && (
+    <div className="fixed inset-0 z-40 flex">
+     {/* Sidebar */}
+     <div
+      className={`fixed inset-0 z-40 flex transform transition-transform duration-300 ease-in-out
+      ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+     >
+      <button
+       onClick={() => setSidebarOpen(false)}
+       className="absolute top-6 right-26 text-black z-50"
+      >
+       <X size={32} strokeWidth={2} />
+      </button>
+      <Sidebar isMobile={true} />
+     </div>
+     {/* Overlay Background */}
+     <div
+      className="flex-1 bg-blue-500/30 backdrop-blur-md transition-all duration-500"
+      onClick={() => setSidebarOpen(false)}
+     />{" "}
+    </div>
+   )}
 
       <div ref={dropdownRef} className="relative">
         <button
@@ -61,14 +89,14 @@ const Navbar = ({title}) => {
           className="flex items-center space-x-3 focus:outline-none"
         >
           <img
-            src="profilePhoto.jpg"
+            src={userDetails?.["profile-photo"] || "profilePhoto.jpg"}
             alt="Profile"
             className="w-10 h-10 rounded-full"
           />
 
           <div className="text-left">
             <p className="text-sm font-semibold">{userDetails?.firstName || "New User"}</p>
-            <p className="text-xs text-gray-500">{userDetails?.mobileNumber || ""}</p>
+            <p className="text-xs text-gray-500">{userDetails?.mobile || ""}</p>
           </div>
 
           <ChevronDown
